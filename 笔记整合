@@ -1,0 +1,2928 @@
+#算法 书籍
+2023年6月5日10:42:55
+
+下载了两本书，先看着
+算法导论_原书第3版_CHS   pdf
+算法图解.pdf
+算法图解的文字可以复制，所以先看这本了。    而且，有很多插图，似乎更基础。
+
+算法图解.pdf
+
+2023年6月5日10:44:09，开始看。
+emmm，这个pdf加密了，需要处理一下
+#一个好用的网站  http://freemypdf.com/
+
+2023年6月5日11:02:16，开始，p16
+第一章  算法简介
+1，谈论算法的运行时间——大O表示法
+
+2，NP问题
+
+3，二分查找法    要求，查找素材是有序表
+对于包含n个元 素的列表，用二分查找最多需要log2n步，而简单查找最多需要n步。
+4，大O表示法
+大O表示法指出了最糟情况下的运行时间
+O(n)    O(log n)
+算法的速度指的并非时间，而是操作数的增速
+#注意，O(log n) 这个表示方法， log的底数未知，实际上也并不在意   可以是2，可以是10。。。
+第二章  选择排序
+5，O(n)  线性时间  O(1) 常量时间
+
+第三章  递归  recursion
+6，递归只是让 解决方案更清晰，并没有性能上的优势。
+第四章  快速排序
+7，分而治之（divide and conquer， D&C）  通用方法
+￥￥如何利用递归，同时返回多个值？
+##解答，一步递归成功，返回三个值：
+def fun(n):
+    while n:
+        return n[0] + fun(n[1:])[0], 1+fun(n[1:])[1], n[0] if n[0] > fun(n[1:])[2] else fun(n[1:])[2]
+    return 0,0, -inf
+###返回列表n的 sum，长度，和最大值
+只要注意 取结果的第几个元素就可以了，    但是注意，这样返回值太多的话，速度超慢！
+猜测：fun(n[1:]) 被执行了太多遍
+优化：
+def fun(n):
+    while n:
+        # c += 1
+        # return n[0] + fun(n[1:],c)[0], fun(n[1:],c)[1], n[0] if n[0] > fun(n[1:],c)[2] else fun(n[1:],c)[2]
+        x = fun(n[1:])
+        return n[0] + x[0], 1+x[1], n[0] if n[0] > x[2] else x[2],n[0] if n[0] < x[3] else x[3]
+    return 0,0, -inf, inf
+#使用一个x = fun(n[1:]) 来记录执行下次递归的结果， 并在返回值中用x替换相应部分
+速度直线上升！！！
+###解读方法，其实就是一个从后往前的逆运算。    把握住递归结束的那一次return条件就可以了。    例如这个fun，递归结束条件就是，
+if not n：
+    return 0,0, -inf, inf
+
+8，python的sort()使用的是什么算法？
+Python的sort()函数是TimSort算法实现的，时间复杂度均摊为O(nlogn)。
+TimSort是由Tim Peters在2002年设计的一种排序算法。它结合了合并排序和插入排序的优点，特别适用于数据量较小或已经部分有序的情况。Python中的sort()函数默认使用的就是TimSort算法，所以时间复杂度均摊为O(nlogn)。
+
+第五章  散列表
+#也就是 hash table
+9，hash table的检查速度比 list快很多
+平均情况下，散列表执行各种操作的时间都为O(1)。
+第六章   广度优先搜索
+bfs
+10，用deque实现bfs  把第二次搜索的值添加在deque后面，这样就可以保证，先找完第一次搜索，然后再开始找第二次的； 查找当前使用deque.popleft()
+检查完的还需要标记一下，来避免重复搜索，甚至产生无限循环
+#O：
+广度优先搜索的运行时间为O(人数 + 边数)，这通常
+写作O(V + E)，其中V 为顶点（vertice）数， E 为边数
+
+第七章   迪克斯特拉算法
+第八章   贪婪算法
+11，set() 可是直接进行  交集，差集操作：
+fruits = set(["avocado", "tomato", "banana"])
+vegetables = set(["beets", "carrots", "tomato"])
+fruits | vegetables ←------并集
+#set(["avocado", "beets", "carrots", "tomato", "banana"])
+fruits & vegetables ←------交集
+#set(["tomato"])
+fruits – vegetables ←------差集
+#set(["avocado", "banana"])
+##没有+ 这个操作
+12，贪婪算法  确实是错的
+13，NP完全问题   也即是NPC问题
+即多项式复杂程度的非确定性问题
+#NP就是Non-deterministic Polynomial的问题，也即是多项式复杂程度的非确定性问题
+
+第九章    动态规划  dynamic programming
+14，典型：背包问题
+使用条件：问题可分解为彼此独立且离散的子问题
+15，    生物学家根据最长公共序列来确定DNA链的相似性
+从拼写检查到判断用户上传的资料是否是盗 版
+
+第十章   K最近邻算法
+16，K最近邻（k-nearest neighbours， KNN）
+##跟ANN  神经网络  没啥关系。。。  但是KNN也可以用到NN里
+
+第十一章   接下来如何做
+17，MapReduce  分布式算法    映射（map）函数和归并（reduce）函数。
+map就是我常用的那个map()
+而 reduce()：
+from functools import reduce
+arr1 = [1, 2, 3, 4, 5]
+a = reduce(lambda x, y: x + y, arr1)
+print(a) #15  这里是求和
+#执行过程((((1+2)+3)+4)+5)
+r= reduce(lambda x,y:10*x+y, arr1)
+print(r) #12345
+ ##执行过程 10*(10*(10*((10*1)+2)+3)+4+5
+18，
+
+2023年6月27日15:46:00，看完了。
+讲的太简单了，收获很有限。。。
+
+# 机器学习&算法   第一本笔记
+2023年3月29日15:59:42
+
+2023年11月28日09:07:51,emmm,其实完全没有搞机器学习啊,这个笔记单纯就是算法
+
+新开的方向    了解人工智能算法
+
+1，分类  &  回归
+
+2023年3月29日16:30:36，发现一个讨论算法的网站，全都是实例
+https://www.acwing.com/
+2，在信息学竞赛中AC、WA、RE、CE、TLE、MLE、PE、OLE分别是什么意思？
+AC-Accepted 答案正确/通过WA-Wrong Answer 答案错误RE-Runtime Error 运行时错误CE-Complie Error 编译错误TLE-Time Limit Exceed 超出时间限制/超时MLE-Memory Limit Exceed 超出内存限制PE-Presentation Error 格式错误OLE-Output Limit Exceed 输出超出限制/输出超限补充一个UKE_Unknown Error未知错误
+
+
+========背包问题  =====
+   01背包，一个物品只能 选或不选
+暴力破解，n个物品，2**n中情况
+dp，动态规划 （Dynamic Programming，DP）是运筹学的一个分支，是求解决策过程最优化的过程。
+===原
+2023年4月2日18:19:30，算法，背包问题
+1，dp数组：动态规划(Dynamic Programming,DP)是运筹学的一个分支,是求解决策过程最优化的过程。
+背包问题中dp[i][j]的含义：  0到i之间的物品， 任取 ， 放入容量为j的背包里
+2，核心代码：dp[j] = max(dp[j], dp[j - goods[a][0]] + goods[a][1])
+而且这个dp已经是一维数组了，经历过了简化
+===
+2023年4月7日19:06:30，写完了，完全按照我的算法到程序的思路写的。    有优化空间。。。
+3，优化：  dp转为一维list
+最后还是利用了递归计算  因为dp5 的运算要用到dp4，但是那个时候dp4还没有算出来
+2023年4月10日17:45:54，01背包ok了
+
+4，完全背包
+#考虑先放价值最大的不对，比如：
+物品的重量，价格：2，100     3，102   1，1
+明显，2，100的价值率是最大的，但是有三格空间，先放2，就已经错误了。
+所以先放价值最大的，是错误的策略！
+5，  完全背包，只要把j倒着扫描就可以了。。。
+for j in range(m+1):
+6，多重背包问题 I   加入了第 i 种物品最多有 si 件
+多了一个数量 si
+使用我最开始的二维数组，也就是从 背包算法二维数组直接推到的那个计算表，取用i号物品之后，si-1，如果si = 0，则表示这个物品没了，不能继续取用
+#相当于，物品扩列，a3个，b2个，c一个， 也就是aaabbc六个物品
+##这也跟暴力解法差不多了吧。。。
+2023年4月20日14:34:37，终于发现错误了，用二维dp的时候，物品初始必须要加上0， 0，不然等同于第一件物品可以无限使用
+多重背包问题 II
+2023年4月20日15:09:38，ok，多重I已经彻底过了，多重II需要在输入上化简一下。
+#开始进入算法优化范畴了
+2023年4月24日15:27:35，自己尝试解决失败了，现在来看别人的做法
+7，利用，二进制优化
+ cin>>v>>w>>s;
+        for(int k=1;k<=s;k*=2)
+        {
+            s-=k;
+            //更新改变之后价值和体积，把大范围的东西慢慢的缩小
+            goods.push_back({v*k,w*k});
+        }
+#利用这个方法，让原本s个a物体，变成了，1个a，2个a，4个a，。。。2**n个啊。    原本s个就变成了只有log2（s）取整个物体了，也就是让物品数目缩小成log2（n）
+2023年4月28日15:39:01，自己写的过了，但是语法上还可简化
+2023年4月28日17:38:21，存档点：多重背包III，还能继续优化
+多重背包问题 III
+8，提示使用：单调队列优化方法
+9，2023年4月29日15:02:08，我自己想不出来。。。    现在计算一下二进制优化的复杂度吧：
+物品数 N   空间数 V
+物品列表   v w s     二级制优化后，变成int log2（s）+1个物品
+也就是 N变成了 sum log2（s）
+    双循环，计算总次数： sum log2（s） * V
+现在V又扩大了10倍，是主要变化
+#问题关键应该就在于，这么优化V
+2023年4月29日15:08:43，我没思路，看答案了。。。
+2023年4月29日15:41:39，单调队列优化似乎可以参考79号题目。
+154号题目 滑动窗口页面没了。。。   在scdn里找到了页面。。。
+2023年4月29日15:56:41，另外，发现acwing用的也都是力扣上的题目，而且力扣上似乎资源更丰富。
+2023年5月4日09:14:52，看《滑动窗口》
+10，map object  转化成list
+#'map' has no len()   使用起来也不方便
+##map并不是一种特殊的格式，而是map（）是一个用来分别计算 list里数值的方法
+例如，n = map(int, input().split())
+input().split() 得到的就是list， 例如['1', '1', '1', '1', '1', '1']
+而后map（int， list）  负责对list中的每个元素都使用 int（）也就是把每个元素的转成int型
+#所以，想要把map object 转成list，只要再外面用list（）就行了
+11，滑动窗口：
+可以用以解决数组/字符串的子元素问题，它可以将嵌套的循环问题，转换为单循环问题，降低时间复杂度。
+2023年5月4日14:40:29，我感觉我看会了滑动窗口，不过，感觉优化的并不多，不知道为什么能过
+力扣上的239题，我在力扣上过一下吧。
+12，list[i:i+k]      比如 n[0：3]   对应的其实是  n[0],n[1], n[2] 而没有n[3]
+2023年5月4日15:55:26，
+13,注意 python里面 没有 else if：
+而是  else：  后面加别的代码   else if： 等价于
+else：
+    if xxx：
+#哦，还是有的 else if变成了elif xxx：
+else： 更自由了。
+14，
+
+
+======背包问题end========
+
+recursive 美 /rɪˈkɜːrsɪv/  递归的
+
+2023年4月16日13:01:05，找任意重复数字
+1，input如何接收int列表？
+#这次的题目，接收函数已经给出了，但是我还是需要自己弄一个
+
+2，时间复杂度 O(x)
+一般情况下，算法的基本操作重复执行的次数是模块n的某一个函数f(n)，因此，算法的时间复杂度记做：T(n)=O(f(n))按数量级递增排列
+常见的时间复杂度有：常数阶O(1),对数阶O(log2n),线性阶O(n),线性对数阶O(nlog2n),平方阶O(n^2)，立方阶O(n^3),...，k次方阶O(n^k),指数阶O(2^n)。随着问题规模n的不断增大，上述时间复杂度不断增大，算法的执行效率越低。
+
+#做算法体常规步骤：
+1，看题，自己想方法
+2，做自己的方法
+3，看别人的解法
+4，理解后自己写一遍
+
+2023年5月9日10:07:00，在做leetcode签到
+今日，有效的时间数目
+1， brute force  暴力破解
+提示都说了用暴力。。。
+最大有效时间   23：59
+
+2，regex：   正则表达式（regular expression）
+#2023年10月22日10:13:47,用到就上网现查规则吧
+3，Counter（）返回的 counter object是一个特殊的字典
+不是tuple，所以还是可以操作的，操作方式就跟字典一样
+4，字符串单个切片，只需要，list[strX]就好了。。。我傻了。。
+  2025年2月12日11:47:59, 字符k个切片 s[i:i+k] for i in range(0, len(s), k)
+```
+s = "1232131"
+k = 3
+ans =[s[i:i+k] for i in range(0, len(s), k)]
+print(ans)
+```
+5，py可以直接比较表示时间的字符串的大小。。
+参考：2446. 判断两个事件是否存在冲突
+6，lambda表达式（匿名函数）
+例子：name = lambda [list] : 表达式
+等价于：
+def name(list):
+    return 表达式
+name(list)
+7，all(A[i]<A[i+1] for i in range(len(A)-1))
+all（）   可以做一个循环判断   返回值是true or false
+8， int 和 str 要注意区分，if s[i] != '1':  还有
+if s[i] != 1:
+不要弄混淆了。    看上去是数字的，其实可能是str
+9，if stack ==[]:return True
+     return False
+这句话等价于 ：  return stack==[]
+10，hashmap = {'{':'}','[':']','(':')'}
+写的是hashmap，其实就是一个普通的dict， <class 'dict'>
+11，backtracking DFS
+DFS： Depth-First-Search   深度优先搜索
+12，math.comb(x，y)  就是组合，C（5，2）
+ 2023年11月9日15:16:58
+#排列:   math.perm(x,y)
+13， python3+  很多方法，比如，zip 之后，出来的结果是<zip object at 0x103abc288>这样看不了的东西，需要自己加一个list（）
+就可以查看了！
+#看不了的object，尝试手动list
+14，heapq    根堆  是一种常用的数据结构
+如果有一个 关键码的集合 K = {k0 ， k1 ， k2 ， … ， kn-1} ，把它的所有元素 按完全二叉树的顺序存储方式存储 在一 个一维数组中 ，并满足： Ki <= K2i+1 且 Ki<= K2i+2 (Ki >= K2i+1 且 Ki >=K2i+2) i = 0 ， 1 ， 2… ，则 称为小堆 ( 或大堆) 。（即双亲比孩子的数值小(大)——小(大)堆）将根节点最大的堆叫做最大堆或大根堆，根节点最小的堆叫做最小堆或小根堆。
+例如：
+
+#这种结构可以有同位素， 但是，小堆的最小值必定在最上面，所以heapq.heappop()之后就变成从小往大依次pop
+##存储的例子：
+import heapq
+heap = []
+data = [1,2,3,4,5,0]
+for i in data:
+  heapq.heappush(heap, i)
+print(heap)
+
+￥如果新放入的数据有问题，那么就在本条通路内部解决
+2023年7月23日13:30:32  heapq详细用法：
+import heapq
+py3里面都是小根堆，如果想大根堆，就自己手动把列表内数组变负值
+heapq.heapify(u)     建立：  inplace操作， 参数u是需要处理的列表    使用
+至于_heapify_max 方法：
+def _heapify_max(x):
+"""Transform list into a maxheap, in-place, in O(len(x)) time."""
+n = len(x)
+for i in reversed(range(n//2)):
+        _siftup_max(x, i)
+emmm，好像也可以。。  返回大根堆
+2023年7月23日14:09:47，emmm，  _heapify_max 使用起来，好像确实有bug， 所以还是自己手动负值，重新处理列表为好。    而且，返回最大值的方法，我看内嵌函数的意思，貌似就是遍历堆，然后返回最后剩下的，那O直接是n了， 直接要超时
+def _heappop_max(heap):
+    """Maxheap version of a heappop."""
+    lastelt = heap.pop()    # raises appropriate IndexError if heap is empty
+    if heap:
+        returnitem = heap[0]
+        heap[0] = lastelt
+        _siftup_max(heap, 0)
+        return returnitem
+    return lastelt
+小堆操作：
+heapq.heappop(u)  弹出小堆的最小值
+heapq.heappush(u,x)  将x插入小堆
+##小堆总能保证一个最小值 就是u[0]
+2023年7月25日10:00:46，看到leetcode实例有一个大根堆的应用：
+class Solution:
+    def halveArray(self, nums: List[int]) -> int:
+        from heapq import _heapify_max as heapify
+        from heapq import _heappop_max as heappop
+        from heapq import _heapreplace_max as heappush
+        total = sum(nums)
+        heapify(nums)
+        cur = 0
+        cnt = 0
+        while cur * 2 < total:
+            # print(cnt,cur,nums)
+            tmp = nums[0]
+            heappush(nums,tmp/2)
+            cur += tmp/2
+            cnt +=1
+        return cnt
+从用法上来看，大根堆的使用应该没有问题。    另，程序用 _heapreplace_max，也即是 heappush(nums,tmp/2)  代替了 pop + push 两步
+##2023年8月5日11:16:03，  看了heapq的文档，似乎就是没有  push_max这个功能， 所以只能勉强使用
+_heapreplace_max  弹出一个 x[0] （在最大堆里，最大的就是9号元素） 然后放进去一个新值
+似乎没法单纯往里放。。。    很奇怪。。。
+
+15，涉及二叉树，链表的题，我还不会生成，倒是我没法本地调试。。。
+#2023年9月17日10:14:55,已经会本地生成了!    但是,调试嫌烦...   工程量较大,不是特别需要的题,还是直接in-place解决吧
+
+16，a|=2等价于a=a|2(按位或)
+17，例如：
+t = 7
+for i in range(t):
+    print(i,t)
+    if i %2 ==1:
+        t-=1
+    i+=78
+这种写法，并不会对for i in range(t): 的循环产生影响。
+也就是不能期待靠这样改变循环
+在程序运行到第二行，for i in range(t):
+时，就已经固定了，循环是  i = 0，1，2，3，4，5，6， 不会被中途影响改变
+#如果像中途修改，可以用while句式
+t = 7
+i= 0
+while i<t:
+    i+=1
+    print(i,t)
+    if i %2 ==1:
+        t-=1
+i+=1
+##2023年9月18日09:39:43,发现错误!!   上面的例子不改变,是因为,range(t)固定了, range(t)只计算一次,不会在t改变后在计算, 保持第一次计算的range(7)
+但是如果, 让 i in 一个列表,而在循环中不断修改这个列表,就能起到动态循环:
+t = [7]
+for i in t:
+print(i, t)
+if i > 5:
+        t.append(i - 1)
+#7 [7]
+6 [7, 6]
+5 [7, 6, 5]
+这样执行的结果,就是不断变化的;  t里面不断添加新元素,而 for i in t: 只会继续遍历新元素
+更好的例子:
+t = [7]
+for i in t:
+print(i,t)
+if i >4:
+        t.append(i-1)
+        t.append(i - 2)
+#7 [7]
+6 [7, 6, 5]
+5 [7, 6, 5, 5, 4]
+5 [7, 6, 5, 5, 4, 4, 3]
+4 [7, 6, 5, 5, 4, 4, 3, 4, 3]
+4 [7, 6, 5, 5, 4, 4, 3, 4, 3]
+3 [7, 6, 5, 5, 4, 4, 3, 4, 3]
+4 [7, 6, 5, 5, 4, 4, 3, 4, 3]
+3 [7, 6, 5, 5, 4, 4, 3, 4, 3]
+18，list数据   如果想加入一个   单元素 ，比如一个int
+需要使用append（x）
+但这样其实比较麻烦，    可以采用 list+[x]
+相当于list.append(x)
+list类可以直接相加
+￥￥注意：
+exImg[1]+=[None]
+exImg[1]= exImg[1]+[None]
+这两种写法，对于list类型来说，并不等价！
+exImg[1]+=[None] 不知道为何，会在更多的行 加上None
+
+#?? 2023年9月17日10:20:30, 现在感觉是一样啊.
+
+正确的深拷贝方法：
+list_three = [[0 for i in range(3)] for j in range(3)]
+19，use = Counter() ##use的形式： Counter({0: 1, 1: 1})
+from collections import Counter
+Counter()  是一个很好用的计数器，可以方便的往里面添加元素，并且记录数值
+20，d = defaultdict(int)
+需要，from collections import defaultdict
+相比于用d= {} 来建立dict ，使用defaultdict建立的dict在提取其中不存在的key时不会报错。
+不然会，KeyError: 'a'
+2023年11月7日17:37:31,  固定的default 值:
+#可以直接写 defaultdict(lambda: '?')  这样查到不存在的key,就会返回字符 '?'
+defaultdict(lambda: 0)  等价于  defaultdict(int)
+
+21，简洁的for循环 ：
+[x for x in a if a.count(x) > 1]
+等价于
+res = []
+for x in a：
+    if a.count(x) >1:
+        res.append(x)
+只是形式上简洁了，但其实没有什么额外的功能；所以不用强求写这种形式。
+22，我找到了！
+141. 环形链表  open法
+因为题目是链表结构，所以输入参数不是给 编写的method直接使用的
+这就导致 pos参数用不到
+然后 直接读取输入的方法：
+# a = list(map(int, input()[1:-1].split(",")))
+f = open("user.out", "w")
+while True:
+    try:
+        param_1 = input()
+        param_2 = int(input())
+        f.write('true\n' if param_2>-1 else 'false\n')
+    except:
+        break
+exit()    #这个exit还是有用的，测试能过，但是提交有可能会出乱码
+==输入列表:
+a = list(map(int, input()[1:-1].split(",")))
+===
+#但这个方法，和后面的写class， 写method好像是割裂的。    不过，可以当做是acwing的题目架构来处理吧。    我姑且试一试。
+2024年1月3日09:35:57, open法输出列表:
+ans ='['+ ','.join(map(str,stack)) + "]"
+        f.write(ans + '\n')
+#因为直接str出列表,答案中有多余的空格
+2024年2月28日11:09:24 尝试用with改造:   失败了....
+with open("user.out", "w") as f:
+        param_1 = input()
+        param_2 = int(input())
+        f.write('true\n' if param_2>-1 else 'false\n')
+
+23，list类型，只有 +  没有-
+        TypeError: unsupported operand type(s) for -: 'list' and 'list'
+24， 多层组合的方法：
+2023年6月20日10:54:45，补充tag：次方迭代
+例子：我有一个 m * n 的矩阵 mat，从每一行中选出任意 1 个元素形成一个数组。    列举出所有的数组。
+总数： n**m
+写法：
+a = mat[0]
+b = mat[1]
+a = list([x]+[y] for x in a for y in b)    #a = list([x,y] for x in a for y in b)
+for row in mat[2:]:
+    a = list(x + [y] for x in a for y in row)
+#第一步需要自己写出来，因为那个时候是[x]+[y]，或者写[x,y]也一样，而后面x已经是list了，就要写x + [y]
+##利用同时进行的双循环 for x in a for y in row     实现乘法式的添加元素
+
+25，mat = [[1,10,10],[1,4,5],[2,3,6]]
+a = mat[0][:100]    #[1, 10, 10]
+这里100 并不会导out of range  ，而只是停到mat[0]最大长度
+26，易错点：
+如果a 是一个奇怪的object  ，使用list 处理
+代码：
+print（list（a））    #正常显示
+a = list（a）
+print（a）   # []  空集，因为list方法会将a总object的内容清空，返回值就是列表；当时不报错，之后就找不到了
+修改：
+a = list（a）
+print（a）
+27，assert k == expectedNums.length;
+assert  断言关键字
+leetcode里面，系统用来测试答案的代码就是使用assert
+相当于，if 满足，继续执行， if 不满足  直接报错
+#实际验证还有更复杂的规则，不如能够判断 ，是不是原地修改数组。    既直接修改一个素组里的单个值，而不是整体copy，处理，然后再整体复制，例如，        26. 删除有序数组中的重复项
+28，一些字典操作：
+a= my_dict.keys()
+print(type(a))   ##<class 'dict_keys'>
+print(a)        ##dict_keys(['first_key', 'second_key', 'third_key'])
+这个dict_keys([ 是自带的，固定的
+输出dict里的第一个元素：print(list(my_dict.items())[0])
+##('first_key', 'first_value')
+由此可见，dict的items表示方法为tuple
+如果直接，print(list(my_dict)[0])    就和 print(list(my_dict.keys())[0])  是一样的，只会返回key
+##first_key
+29，一个list操作的错误：
+二维数组，ops = [[2,2],[3,3],[3,3],[3,3],[2,2]。。。
+我想要求第一列的最小值：
+a= min(a[0] for a in ops)
+错误示范：
+a= min(a for a in ops[:][0])
+#ops[:] 就是 ops  ，所以ops[:][0] 就是 ops[0]，也就是第一行
+30， 二叉树操作：如何完整打印出一个二叉树结构
+方法一：
+def fun(node):
+            if node is None:return
+            print(node.val)
+            node.left = fun(node.left)
+            node.right = fun(node.right)
+            # return None
+fun(root)
+# 方法一，可以完整打印，但是顺序不对！
+2023年6月16日10:00:53，补充，二叉树的，前序，中序，后续，遍历
+需要修改的就是，print(node.val)插入
+fun(node.left)
+fun(node.right)
+中的位置。
+另外，node.left =可以省略，递归最后的结果，赋值也是None
+如果加上node.left = 则会在方法执行之后，将tree的子节点都清空成None
+
+31，def __str__(self):
+在class 里定义了这个方法之后， print 这种class 就可以直接显示出我想打印出的数据结构了：
+32，@cache
+@cache装饰器就提供了一个方便的方法来缓存任何昂贵的函数调用结果并以后重用它们
+from functools import cache
+@cache
+def compute_expensive_result(x, y):
+    # 在这里进行较长的计算
+    return result
+每次调用compute_expensive_result函数时，它会先检查函数的输入参数是否已经缓存了结果。如果是，则它会直接从缓存中返回结果，否则它会执行函数的计算并将结果存储在缓存中。
+#没有实际作用， 只是优化速度
+##效果：原本超时的解答，使用了@cache之后就通过了！！！
+2023年11月3日09:15:27, 据说,在用完之后, 在return 前加上 xxx.cache_clear() 可以跑的更快.    xxx是def的函数名字
+例如:            dfs.cache_clear()
+2023年8月17日10:57:45，想要使用 @cache， 似乎需要  def fun（a,b,c,,,） 其中参数a，b，c都是int   不能是 列表之类的怪东西
+2023年10月24日10:23:51,
+##想要用@cache  结果就不能用外部计数    例如, 外面写ans = 0  def里面达成条件 nonlocal ans;...;  ans+=1
+不然加上@cache之后,速度确实会变快,但是记忆化的只有return 值, 而不会记忆保存在外部的ans变化
+因此,这种时候,就必须把ans值写进return里
+##2023年12月1日11:26:57, 注意,有的时候, 用完不清理 会MLE, 所以要加
+ .cache_clear()
+
+33， 利用dict计数：
+例子：
+a = [1,2,3,4,1,2,3,3,3,1,1,1]
+hash = {}
+for i in a:
+if i in hash:
+        hash[i] += 1
+if i not in hash:
+        hash[i] = 1
+print(hash)
+输出：{1: 5, 2: 2, 3: 4, 4: 1}
+类似：
+b = Counter(a)
+print(b) ##Counter({1: 5, 3: 4, 2: 2, 4: 1})
+34，res %= int(1e9 + 7)
+1e9  表示  10**9
+35，单独给0排序，利用sort（）
+return sorted(nums, key=lambda item: 0if item > 0else1)
+# 另外，注意，sorted(  和.sort( 的区别
+sorted会返回一个新的list， 而sort（）直接修改原list，并且没有返回值
+故有：p = sorted(nums, key=lambda item: 0 if item > 0 else 1)
+print(p)    #print(nums)还是原值
+等价于：nums.sort(key=lambda item: 0 if item > 0 else 1)
+print(nums)
+##2023年7月21日11:07:28， sort条件详解：   item  为 nums里的单个元素  相当于语句  for item in nums:
+：后面的内容就是排序条件值： 这里是0或1。 如果写 item ，就是根据元素自身的大小值
+
+
+36，比较两个list是否相等：
+ py不能直接比较两个list
+list是可以直接比较的，我的问题出在 利用np进行转置之后，
+<class 'numpy.ndarray'>  矩阵中的一行，格式不是list了。
+37，手动转置： （n*n）
+B = [[grid[j][i] for j in range(n)] for i in range(n)]
+对于m*n：
+B = [[A[j][i] for j in range(len(A))] for i in range(len(A[0]))]
+等价于：
+for i in range(len(A[0])):#len(A[0])矩阵列数
+    temp = []
+    for j in range(len(A)):#len(A)矩阵行数
+        temp.append(A[j][i])
+    B.append(temp)
+方法二， 利用zip转置：
+list(zip(*A))
+解释： 例如A = [[1,2,3],[4,5,6],[7,8,9]]
+*A  会把里面的元素解放出来， [1, 2, 3] [4, 5, 6] [7, 8, 9]  中间用空格间隔
+list(zip(*A))   #[(1, 4, 7), (2, 5, 8), (3, 6, 9)]
+zip(a,b,c,d,...) 将 abcd等列表中的第0，1，2。。。个元素组合起来；
+因此也刚好完成了转置功能
+但是组合出来的是 tuple
+
+38，在代码里面print（）  虽然不会导致时间增加很多，但是确实会导致  超出输出限制
+39，字符串是直接可以count 某个字符的：
+a = s.count('A')
+40， ord（'A'）       返回字符对应的数字
+az 97, 122  AZ 65, 90
+另外，利用a = word.upper()    word.lower()  也可以来判断大小写
+word == word.lower()  说明全是小写
+#ord的反函数  chr()
+41，int(a, 2)
+将2进制写法的 str a 转化成int
+#int() base must be >= 2 and <= 36, or 0
+最多转化36进制，也就是0~9 加上a~z
+￥ '{0:b}'.format(k)  等价于  str(bin(k))[2:]
+将数字k 转化成二进制 str
+#保留4位小数 ：
+cc = format(c, '0.4f')
+等价于 cc = '{:0.4f}'.format(c)
+##2024年1月16日14:59:38,
+简单表述: '%.2f'%a    注意,a是数字
+## 比较好的 f'表示形式  2024年6月18日08:55:46
+b = f"{num:99.5f}"   # 前面的99是字段总长度, 不会补前缀零,但是会补空格
+###2024年5月20日16:54:39,  被坑了,  "{:.1f}".format(i) 形式在 i数字非常大的时候, 会出现错误...
+例题: https://ac.nowcoder.com/acm/contest/82394/E
+#貌似属于浮点问题, 转成浮点之后经度受限制.
+解决方法,str化, 然后自己转...
+
+42，bisect.bisect(w,i)
+应用于：1170. 比较字符串最小字母出现频次
+bisect.bisect(w,i)  快速比较并计数：bisect是python内置模块，用于有序序列的插入和查找
+bisect.bisect(a,c)：返回数组a中最后一个<=c的索引值+1
+43， sort（）条件 恶补：
+具体问题：  key = [[6, 4, 2], [7, 3, 4], [10, 1, 9], [7, 2, 5]]
+然后需要根据  key[:][0] 也就是列表中每行第一个元素，也就是第一列的元素sort
+lambda举例：
+a = {
+    'a': {'start': 10, 'end': 20},
+    'd': {'start': 10, 'end': 19},
+    'c': {'start': 3, 'end': 20}
+}
+b = sorted(a.keys(), key=lambda x: a[x]['start'])
+# b =['c', 'a', 'd']
+d = sorted(a.keys(), key=lambda x: (a[x]['start'], a[x]['end']))
+# d = ['c', 'd', 'a']
+2023年8月8日10:58:04，  lambda详解
+sorted函数中，第一个参数是排序主体，即将要被排序的东西
+而lambda后面的x 必然属于主题  ， 即 for x in a.keys() 这句其实在里面，但是省略了；  然后，冒号：后面的值，就是排序的根据值，是一个经由x计算出来的数字，按sort泡排序；    可以写两个值， （f(x)值1，f(x)值2）也就是先按f(x)1排序，对f(x)1相等的结果再按照f(x)2排
+二维数组的条件排序：
+key.sort(key = lambda x:(-x[1],x[2]))
+ps： 默认结果就是 key.sort(key = lambda x:(x[0], x[1], x[2]))
+  先根据x[0] 从小到大，然后根据x[1], 然后x2
+这里的x已经是 一维列表了，可以理解为， for x in key：
+x 可以用任意字母替换， 代表的是被sort列表中的任意元素
+##sort的时间复杂度: O(n*logn)
+
+44，list组装成链表：
+我有列表l2：
+        m = len(l2)
+        nEnd = ListNode(l2[-1],None)
+        head = nEnd
+        for i in range(m-1):
+            head = ListNode(l2[-2-i], head)
+        print(head)
+        return head
+链表读取成list：
+l = []
+while head:
+         l.append(head.val)
+         head = head.next
+45，一种循环列表，需要编号的代替写法：
+for i in range(len(nums)):
+            ans += i*nums[i] - s
+            s += nums[i]
+等价的可以写成：
+for i, x in enumerate(nums):
+            ans += i * x - pre
+            pre += x
+##enumerate() 可以有第二参数,代表i的初始值,
+例如  for i, x in enumerate(nums, 6):
+那么i = 6,7,8,9...  代替原本的 1,2,3...
+
+46， 我记得似乎有这种写法：
+for i in a and not in b：
+但是出错了， 等以后看到再记录吧。
+##我记忆里的，大概是这总写法：
+less = [i for i in nn[1:] if i < pivot]
+在快速定义来才可用过，拆开写条件就不能用了
+x = [i for i in a if i not in b]
+完整程序例子：
+a = [1, 2, 3, 4]
+b = [1]
+c = [2]
+x = [i for i in a if i not in b and i not in c]
+print(x)  # [3, 4]
+上面其实等价于：
+x = [i for i in a if i not in b+c]
+##2023年8月16日10:17:20 总结：
+第一部分： x in a  这个是总范围， 相当于确定了扫边x的范围，就是a中的所有值， 后面不能再添加。
+第二部分：if  扫描每一个x值，去运算式里，然后结果做Boolean， ==True 就保留x
+
+47，位运算 等价：
+m = x<<n
+m= x*2**n
+似乎就是基于二进制的
+48，去除list 中的重复项：
+我之前使用的都是tem = []
+if not in tem：
+tem.append()
+可以减少一行：
+res = []
+[res.append(x) for x in a if x not in res]
+其他方法： 使用set
+test_list = list(set(test_list))
+#注意，set是无序的
+
+49， accumulate() 方便的求前缀和的函数
+prefix = list(accumulate(    [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],    initial=0))
+#[0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
+把一个list 变成这个表的累加值list，这样可以方便计算累加
+如果不写initial = 0， 那么就没有第一项0
+#注意, initial = 必须写!
+50，涉及固定方向移动，为了不超出list range 更加省事的方法：
+direct = [[0,1],[1,1],[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[-1,1]]
+for di, dj in direct:
+    i0, j0 = ti +di, tj+dj
+    while m> i0 > -1 < j0< n and chessboard[i0][j0] !='.':
+将所有移动方向列出来，然后计算移动后坐标，然后判断是否出界，再判断自己的条件
+
+51，字符串，想倒序输出到第一个字符：
+print( str[8:-1:-1])   是错误的，因为第二参数的-1代表最后一个字符，导致输出为空
+正确写 str[8::-1]   就可以了；
+但如果，需要的是限定位数；
+比如  str[i:i-3:-1]     那么在i == 2时就会出现bug
+答：  改成用
+ss = ''
+for j in range(i,i-3,-1):
+        ss += str[j]
+使用   range(i,i-3,-1)   -1值不受影响，就表示0后面一个
+方法2： 给str[i:i-3:-1]     的第一项，i == 2  特殊照顾
+52，   nonlocal count
+在函数里面加上一个外部的参数
+常用作计数器
+提前说明这个参数是  nonlocal， 就会去外面找，就不会报错：
+UnboundLocalError: local variable 'count' referenced before assignment
+#可以解决我很多 递归函数想返回的值不放在参数里的问题
+2023年10月25日10:03:21, 问题解决: no binding for nonlocal
+nonlocal关键字只能作用于局部变量, 就近找的也最近的局部变量
+如果想要nonlocal的值是一个全局变量,这种时候就使用global
+    nonlocal一定是在局部的里面搞,其实,如果找到了最外面,应该可以自动规划成global的,但是py3没做这个优化,所以就造成了error; 而global是定死了,就是要用最外部定义的全局变量
+##PS,力扣的解答可以内部打表:  例题:2698. 求一个整数的惩罚数
+内打表的方式: 在最外部写上打表代码,生出表 ,然后在 Solution里面查表
+    推测力扣的测试结果, 是执行一遍解答程序之后, 不断调用 print(Solution().fun(xxxx)), 因此打表只进行一次,多次复用时间就降低了
+
+53，str.replace() 就是一个需要返回值赋值，而不是直接修改原str的方法
+与sort()不同。
+#所以，要说一个方法或者函数是直接修改参数，还是给出返回值，是不固定的。    还得看具体是什么
+54，关于mod：
+mod = 10**9+7
+res = res * (n+1)%mod
+可以直接使用。
+但是如果写mod = 1e9 +7
+那么res会变成 x.0  自动变成了保留一位小数
+55，dp类问题： 状态定义与状态转移方程
+再注意一下初始值
+
+56，if any(c>k for c in Counter(nums).values()):
+            return -1
+nums是一个列表    其中的任意重复元素数，如果大于k， 则返回-1
+any（） 函数
+执行的是return 所以等价于：
+for c in Counter(nums).values()：
+    if c>k:return -1
+但是如果执行的不是return操作，而是x语句，那么使用any代表 x语句只会最多执行一次
+57，位运算符
+~	按位取反	~4     #~x = -(x + 1)
+&	按位与	4 & 5
+`	`	按位或
+^	按位异或	4 ^ 5
+<<	左移	4 << 2
+>>	右移	4 >> 2
+都是先把操作数转化为bin，然后进行位运算，然后在将结果转回int
+58，验证回文， 最方便的判断还是：
+s == s[::-1]
+59，j = h.get(a, None)
+get用法：dict.get(key, default=none)
+用于查询一个dict，  从其中找到key，如果没有，default返回None，或者返回自定的值
+
+60，关于list计数：
+class Solution:
+    def alternatingSubarray(self, nums: List[int]) -> int:
+        n = len(nums)
+        ans = -1
+        for i in range(n-1):
+            if nums[i+1] - nums[i] == 1:
+                for j in range(i, n-1):
+                    if nums[j+1] - nums[j] == pow(-1, j-i):
+                        ans = max(ans, j - i + 2)
+                    else:
+                        break
+        return ans
+##用二层循环来写，还有实时更新ans，可以优化我使用flag，还有更新结果的冗长代码
+但是， 外层用for 不如用while i  来一个 i+1扫描 ，不然，break之后， for i in range(n-1): 会重复计算。  当然，简单题不会超时。。。
+我原来写的：
+class Solution:
+    def alternatingSubarray(self, nums: List[int]) -> int:
+        #那不就是s0 = s2
+        ##
+        n = len(nums)
+        f = 0
+        c = 0
+        res = 0
+        for i in range(1,n):
+            if f == 0:
+                if nums[i] == nums[i-1]+1:
+                    f = 1
+                    c = 2
+                    # continue
+            elif f == 1:
+                if nums[i] == nums[i-2]:
+                    c+=1
+                else:
+                    res = max(res,c)
+                    c = 0
+                    f = 0
+                    if nums[i] == nums[i-1]+1:
+                        f = 1
+                        c = 2
+        if f == 1:
+            res = max(res,c)
+        return res if res!=0 else -1
+
+61，Counter的时间复杂度：
+利用Counter函数对数组中元素的出现次数进行统计，这一步的时间复杂度时O(n)，这个不难理解，对频次进行统计，就是对数组遍历了一次。
+Counter就是个带着壳的字典。 在Counter之后还是可以随意修改的：
+nums = [1,2,3,2]
+m = collections.Counter(nums)
+print(m)    #Counter({2: 2, 1: 1, 3: 1})
+m[1] = 100
+m[100] = 100
+print(m)    #Counter({1: 100, 100: 100, 2: 2, 3: 1})
+62， two-pointers  双指针的英文名
+63，bisect(), bisect_left()和bisect_right()   用于二分查找，有效提高速度！
+bisect.bisect(nums->list, a->int)  ->int
+第一个参数是列表， 需要已经拍好序的数字列表    第二参数是随便一个数字，    返回值是 应该把第二参数塞进有序列表的第几个值 也就是返回index
+#但如果nums自己没sort  那么返回的结果就会出错。。
+可以看到源码，用的就是二分查找：
+    if key is None:
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if x < a[mid]:
+                hi = mid
+            else:
+                lo = mid + 1
+例子：
+import bisect
+a = bisect.bisect(nums, 2)
+2023年8月2日14:51:18，
+bisect() 等价于  bisect_right()
+#注意, bisect_left()和bisect_right() 由于去=位置的不同,所以还是有本质区别的!!!
+##2023年10月22日10:24:48,上面那句话错误, 没有本质区别 bisect_left x 等价于 bisect_right x-1, 有时还要考虑一下,给结果+1
+from bisect import * 之后 直接用
+
+64， s[a]  如果a过大可能会 index out of range   但是用s[a:a+1]  就不会了。
+#2023年9月17日10:24:33, 但是   s[a:a+1]是个 列表, 要比较带上[]
+对str 和list  都有效
+#注意，超出之后，返回为        空；    优点是，不会报错了，可以继续运行
+65，1851. 包含每个查询的最小区间   利用排序和 heapq 缩小每次查询时需要查询的数据范围，来进行算法优化 O(mlogm+nlogn)
+66， 少了删除同项的步骤导致tle，这也太草了。。。
+obstacles = set(tuple(s) for s in obstacles)
+#另外， list是unhashable， 不能直接进set
+##但是 tuple 可以;  tuple一旦初始化就不能修改
+67，class实例化时，加不加括号问题：
+class CustomFunction:...
+a = CustomFunction()
+aa = CustomFunction
+print(a.f(1,1),a,aa,CustomFunction,CustomFunction())
+##2 <__main__.CustomFunction object at 0x000001E8611B75E0> <class '__main__.CustomFunction'> <class '__main__.CustomFunction'> <__main__.CustomFunction object at 0x000001E8611B75B0>
+结论 aa = CustomFunction 实际上相当于C语言中的typedef的作用,相当于给 类起了一个别名
+###但是leetcode用的 py3版本， 实例化是不加括号的    。不同点还有 List  用的大写L
+68，Kadane's Algorithm  最大连续子序列的和
+Kadane是 卡耐基·梅隆大学教授金出武雄（Takeo Kanade）   所以这确实是个日语名字。。。
+用来计算，最大连续子序列的和
+## 别人的评论： 走完这一生 如果我和你在一起会变得更好，那我们就在一起，否则我就丢下你。 我回顾我最光辉的时刻就是和不同人在一起，变得更好的最长连续时刻
+69， dp[i] = nums[i]+(dp[i-1] if dp[i-1]>0 else 0)
+        dp[i] = nums[i]+dp[i-1] if dp[i-1]>0 else nums[i]
+ 这两行代码等价， 说明 = 的优先级很高     要在算式里面嵌套 if else值， 1，要么把 ifelse值用括号圈起来， 2，要么整个= 后面的值都是 ifelse值
+70，all函数：
+例子 ：  all(i<0 for i in nums)        boolean判断 在里面， 第一个参数
+Return True if bool(x) is True for all x in the iterable.    If the iterable is empty, return True
+一定要有iterable 迭代对象的表倒是。  即 for i in nums 类似。
+令， any()   只要有一个迭代对象满足，就是true
+#all相当于 与  ，  any相当于或
+2023年8月4日14:17:20， all的参数可以当做是一个列表，比如：[True, False, False]  或者 <generator object <genexpr> at 0x00000224B38930D0>    一个迭代对象， 列表化之后也是一样
+文档定义：Return True if bool(x) is True for all values x in the iterable.
+bool(-3) = True
+
+
+71，正难则反    一个常用的解数学问题的思路
+# 一个应用案例, 而且是必须使用:  https://leetcode.cn/problems/dungeon-game/    正向dp的话,会出现多种情况, 而反向,从终点往回走, 则只有一种!
+72，对于一些累加计算，
+每次 sum 不如手动计算，比如：
+i = 0
+        for l in range(n):
+            s = 0
+            for r in nums[l:]:
+                s += r
+                t[i] = s
+                i += 1
+就比：
+for l in range(n):
+            for r in range(l+1,n+1):
+                t[i] = (sum(nums[i] for i in range(l,r)))
+                i += 1
+要节省更多的时间。
+又比如统计不同元素时，手动统计 就比 一直 len(set()) 节省时间
+##区别很明显，就是超时与否
+73，优化技巧： 使用哈希集合存储判断值，然后进行条件判断的时间是O（1）因此可以有效的用来优化
+例子： 771. 宝石与石头
+O(m+n)O(m+n)，其中 mm 是字符串 \textit{jewels}jewels 的长度，nn 是字符串 \textit{stones}stones 的长度。遍历字符串 \textit{jewels}jewels 将其中的字符存储到哈希集合中，时间复杂度是 O(m)O(m)，然后遍历字符串 \textit{stones}stones，对于 \textit{stones}stones 中的每个字符在 O(1)O(1) 的时间内判断当前字符是否是宝石，时间复杂度是 O(n)O(n)，因此总时间复杂度是 O(m+n)O(m+n)。
+否则，每次判断 x in jewels 复杂度就是 O（mn）
+##（有就是set = set（list）） ，之后 查询   if x in set：  而不是 if x in list：
+
+74，Lazy Segment Tree ，惰性段树      lazy tag + 线段树
+#线段树： 线段树是一个二叉树，每个结点保存数组 \textit{nums}nums 在区间 [s,e][s,e] 的最小值、最大值或者总和等信息。
+详见： https://leetcode.cn/problems/handling-sum-queries-after-update/solution/geng-xin-shu-zu-hou-chu-li-qiu-he-cha-xu-kv6u/
+2569. 更新数组后处理求和查询 的题解
+##线段树 作用 ： 在修改列表中的一段连续数字， 或者查询是 ， 原本需要O(n)，用线段树优化数据结构之后，这些操作只需要O(logn） 从而节省了时间。        ##感觉上有点类似二进制优化
+线段树的构建：https://leetcode.cn/problems/handling-sum-queries-after-update/solution/xian-duan-shu-by-endlesscheng-vx80/
+需要自己手动写出 线段数的构造函数
+2023年10月30日15:38:03
+# 线段树  用于,给一个里列表,更新一段连续子数组的值(如+x, 取反), 或者查询子数组的值(如求和, 求min)
+优化结果: 让O(n)  缩小成了O(logn)
+核心: 将列表不停拆分, 拆分成二叉树, 如下图:
+
+2023年11月13日10:28:19,补充  树状数组  板子:https://leetcode.cn/problems/range-sum-query-mutable/solutions/2524481/dai-ni-fa-ming-shu-zhuang-shu-zu-fu-shu-lyfll/?envType=daily-question&envId=2023-11-13
+###原理:  类似与二进制优化   方便计算一排数字的sum了,但是不像前缀和, 将时间复杂度从O(n)缩减到O(1),而是缩减成O(logn)... 也是不错的优化
+详细原理见下图:
+
+2024年1月18日14:01:25, 一个丝滑的动画视频:https://www.bilibili.com/video/BV1ce411u7qP/?vd_source=c3405c73656cbabbc56a2be0b4a50004
+# 无脑的累加(普通列表) ---  线段树or 树状数组 --- 前缀和      三者属于递进的关系
+#特殊: i += i & -i  ##对应 x = x + lowbit(x) 的更新计算
+###延伸: 数学上如何进行反码的运算, 感觉搞清楚了这个,可以有助于进行冰雹算法的研究
+
+
+75，^1 可以很好的起到切换 flag的作用。
+因为 1^1 = 0
+        0^1 = 1
+^ 异或运算，相同出0，不同出1
+
+76， int(x, 2)    将str x 按照2进制解读成 int
+
+77，位运算例题：
+2569. 更新数组后处理求和查询
+class Solution:
+    def handleQuery(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
+        n = len(nums1)
+        s = sum(nums2)
+        x = int(''.join(map(str, nums1[::-1])), 2)
+##因为nums1 只要存储0和1 因此可以转化为2进制数。 这里倒过来输入了
+
+        ans = []
+        for op, l, r in queries:
+            if op == 1:
+##执行的其实就是按位取反； y本来是1，左移 (r - l + 1)  在 -1 等到一个 r-l位的111111...然后在左移l，得到一个 前r-l位是1，后l为是0的二进制数字串，  x^y 就一次计算完成了 r到l位的按位取反
+                y = (1 << (r - l + 1)) - 1
+                y <<= l
+                x ^= y
+            elif op == 2:
+##不用考虑nums2的具体数字，其实只要考虑总合就可以了； x里有几个1，就加上 几乘以l（ queries[1]）
+                s += l * x.bit_count()
+            else:
+                ans.append(s)
+        return ans
+
+位运算详细：
+把一个集合存储成一个数字：
+set = {0,1,2,4,7,8}
+s = 0
+for x in set:
+    s += 1<<x
+print(s, bin(s))    #407 0b110010111
+虽然查询set 比如in set 这种操作已经很省时，但用一个数字来表示集合，进行集合运算更节省
+比如两个集合，取交集，取并集  s1&s2   s1|s2      ;按位异或（^） 按位取反（~）
+2023年11月4日11:06:27,   .bit_length() 方法, 计算前面数字的bit位数
+2023年11月21日19:33:10, 位运算技巧,题解: https://leetcode.cn/circle/discuss/CaOJ45/
+lowbit:   s & -s
+highbit:  1 << (s.bit_length - 1)
+
+
+
+78，itertools.combinations()
+使用 itertools.combinations() 可得到输入集合中元素的所有的组合。
+例子：
+import itertools
+a = [1,2,3,1]
+b = itertools.combinations(a,3)
+print(list(b))   #[(1, 2, 3), (1, 2, 1), (1, 3, 1), (2, 3, 1)]
+并不是非常还用，    后面还有用一个int参数，表示组合a中的几个值，不是一步到位的返回所有组合
+
+79，前缀和     作用：  降低每次都sum的复杂度
+基本思想： 对于每个子数组需要使用 O(n)O(n) 的时间计算子数组的和。如果能将计算每个子数组的和的时间复杂度从 O(n)O(n) 降低到 O(1)O(1)，则能将总时间复杂度从 O(n^3)降低到 O(n^2)
+
+#不用每次都求sum了，而是求 sum j到i ，只要用  psum j - psum i 即可
+2023年8月8日10:10:08，计算前缀和的方便函数： accumulate()
+preSum = [0] + list(accumulate(nums))    或者   preSum = list(accumulate(nums, initial=0))
+#对连续子序列和很好用；    但如果不是连续的那就没用了
+
+80，dict的查询：
+dict.keys()    ##返回键值   dict_keys([8, 9, 5, 7])   实际上可以直接当做list使用
+dict.values()      返回键的对应存储值，同上
+dic.items()：返回元组的列表，每个元组由（key：value）组成。
+dic.update(dic2)：用字典dic2中的条目更新字典dic中的内容。
+dic.get(key，res)：若能在字典dic中找到键值key，则返回key，否则返回res。
+
+2023年7月30日14:56:51，下一步，把递归和迭代的互相转化clear。  例子：汉诺塔递归，改写成迭代
+
+81，pass  这个关键字才是什么都不做
+82，deque的使用，这竟然没有记录。。。
+from collections import deque
+dq1 =deque([1, 2, 3, 4])
+dq.popleft()  可以弹出左边的值，就是双端队列的优势   dq.pop()弹出右边的值，大家都有
+dq1.append()
+dq1.appendleft()  同样的，可以两端插入
+##2023年9月12日10:49:48,我发现,deque的功能,其实用普通列表就可以完成:
+popleft:     que.pop(0)
+appendleft:   que = [x]+que
+###注意, pop(0)虽然可以用,但是是一个O(n)的操作,如果外面没有循环还好说,如果外面本身就是O(n)的循环,那么再用pop(0),就变成O(n**2)了,要考虑超时问题 2023年12月3日14:07:27
+#也可以用指针代替: p = 0 指向list, 如果popleft,  值 = list[p] 然后 p+=1 如果p超过list长,则说明list无了
+2023年11月28日09:45:16,  deque不方便, 不能直接deq[1:] 这样的读取,也不能deq.pop(1)
+而list还有一种方法  .insert()
+arr.insert(0, val)   相当于 appendleft   而 arr.insert(i, val) 可以任意位置插入新的值  等价: arr[:i] + [val] + arr[i:]
+##不过,在python神书《Python Cookbook》中有这么一段话：在队列两端插入或删除元素时间复杂度都是 O(1) ，而在列表的开头插入或删除元素的时间复杂度为 O(N)。     ##emmm,不知道靠不靠谱
+
+83，深拷贝：
+2023年8月4日15:35:55，及各种列表拷贝问题
+import copy
+a = copy.deepcopy(b)
+最稳妥，对二维列表可用，多维应该也没问题的
+b，list_new = list_old.copy()
+list.copy() 只对  一维列表好用， 如果用在二维列表上就要吃大亏了。。。
+copy还有重新构造方法，都只能拷贝一层列表，也就是  浅拷贝  。 对一维以上的列表就失效了，所以还是深拷贝好使。
+另外还有一种深拷贝：
+import numpy as np
+arr_copy = np.copy(arr)   使用numpy的copy也是深拷贝
+84，re.sub()
+re.sub() 是 Python 中 re 模块提供的一个函数，用于在一个字符串中搜索并替换满足正则表达式匹配的部分。其基本语法如下：
+re.sub(pattern, repl, string, count=0, flags=0)
+其中，参数含义如下：
+pattern：正则表达式模式，用于匹配要替换的文本。
+repl：替换字符串，用于替换满足 pattern 匹配的文本。
+string：要进行替换操作的原始字符串。
+count：可选参数，用于指定替换的最大次数，默认为 0 表示全部替换。
+flags：可选参数，用于指定正则表达式模式的匹配标志，如 re.IGNORECASE 表示忽略大小写匹配等。
+re.sub() 函数会搜索 string 中满足 pattern 的子串，并用 repl 替换它们。替换后的字符串作为函数返回值返回。例如：
+import re
+text = "hello, world!"
+new_text = re.sub(r"world", "Python", text)
+print(new_text)  # 输出 "hello, Python!"
+在上面的例子中，正则表达式模式 r"world" 匹配了原始字符串 text 中的 world 子串，并用 Python 替换了它。
+正则语法： https://www.runoob.com/regexp/regexp-syntax.html
+\s 可以匹配\n
+举例:   https://leetcode.cn/problems/reverse-substrings-between-each-pair-of-parentheses/solutions/1293478/zheng-ze-yi-xing-bu-jie-shi-by-freeyourm-20vu/?envType=list&envId=m7X6xrui
+s = re.sub('\(\w*\)', fun, s)
+
+85， filter()   函数第一个参数接收一个函数，第二个参数接收一个序列；把传入的函数一依次作用于每个元素，然后根据返回值是 True 还是 False 来判断是否留下该元素
+"""
+    filter(function or None, iterable) --> filter object
+    an iterator yielding those items of iterable for which function(item)
+    is true. If function is None, return the items that are true.
+ """
+86，floor() 是向下取整，跟int一样。   ceil（）才是向上取整
+向上取整的数学实现:
+     例如 a/b  向上取整:   (a+(b-1))//b    解释, 如果b>=a>=1 ,则和会 2b-1>=x>=b, //之后刚好等于1
+# 2023年12月5日09:43:08   没有直接的四舍五入, Python3 的 round() 为四舍六入五成双
+
+87，pairwise('ABCDEFG')     #[('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'E'), ('E', 'F'), ('F', 'G')]
+该函数可以提取出一个数组中相邻一组位置的元素
+88，寻找数组中的最大值，并输出编号（第一个）：
+return scoreEdges.index(max(scoreEdges))
+index()函数 方法，属于list object
+    def index(self, *args, **kwargs): # real signature unknown
+        """
+        Return first index of value.
+
+        Raises ValueError if the value is not present.
+        """
+        pass
+89，x = nsmallest(2, a)
+返回list a 中的最小两个值，返回值也是列表 [a1,a2]
+例子：
+from heapq import nsmallest
+a = [[7, 0], [8, 1], [9, 2], [2, 3]]
+x = nsmallest(2, a[1])
+print(x)    #[1, 8]
+用heapq来实现的，所以O（n）会比sort（）的O(n*logn)要快
+#2023年9月18日23:13:42,相反还有
+nlargest(n, iterable, key=None):
+
+90，open法遇到的一个问题：
+x= xxx
+x = int（x）因为x太长，报错：SyntaxError: Exceeds the limit (4300) for integer string conversion: value has 4301 digits; use sys.set_int_max_str_digits() to increase the limit
+解决：
+import sys
+sys.set_int_max_str_digits(0)
+这样从str转换成int 就不限制位数了
+##但是不知道为啥，我pc上的python就不认可这个解决办法。。。
+###知道问题了， 如果 直接赋值 a = 2131...一个长达4301位的数字，就会直接触发这个错误，而赋值用的是更前一级的代码，所以用sys.set_int_max_str_digits(0)也不能解决。    非要这么复制的话，把字符写成 a =“2131...” ，解除限制，然后 a = int（a）
+91，SortedList  这个函数好像比heapq更加方便，直观    应用起来更好操作
+from sortedcontainers import SortedList
+head = [0,1,2,3,-3,3,1,-1,6,-12,1,2,3,0]
+sl = SortedList(head)
+加入元素，  sl.add(x)
+sl和普通list一样使用，可以用bisect直接查找
+j = sl.bisect(y)
+2023年11月29日14:50:31, SortedList()结构, 可以使用pop(0)
+
+92，python __lt__()用法
+语法： __lt__(self, value, /)
+python源码中对__lt__()的介绍：
+    Return self<value.
+即，__lt__()方法可用于比较调用对象同参数value之间的大小关系。
+举例：ListNode.__lt__ = lambda a, b: a.val < b.val  # 让堆可以比较节点大小
+来自：https://leetcode.cn/problems/merge-k-sorted-lists/
+
+93，set（） 运算不能用 + 号，不然报错：
+a = [1,2]
+b = [2,3]
+print(a+b)    #[1, 2, 2, 3]
+c = {1,2}
+d = {2,3}
+print(c|d)      # {1, 2, 3}
+##2023年10月21日10:16:11, 补充 ,集合的操作:
+举例:
+a = {1,2,3}
+b = {2,3,4}
+c = a.union(b)
+d = a.difference(b)
+print(a,b,c,d)
+union 和 difference 都是 return .. as a new set
+## 可以用 | -   还有 &表示交集
+2023年11月6日09:41:47, 完整:  set间的运算    & 交集   |并集    -差集    ^对称差集,即并集里面去掉交集##定义上差集是A-B, 但我在这里写的是 A-B|B-A , 叫做,对称差集
+a = {1,2,3}
+b = {3,4}
+print(a.union(b), a|b, a&b, a^b)
+a.intersection_update()
+
+94，看到一种新的list计算式：
+slices[i-1:i+2] = slices[i - 1] + slices[i + 1] - slices[i],
+在语句最后注意有一个逗号 【,】 这个表示 ，  把链表中的这一段slices[i-1:i+2] 整体赋值成后面这个值， 变成一个元素
+使用举例：
+list0 = [1,2,3,4,5,6,7,8,9,10]
+# list0[:5] = 3   #TypeError: can only assign an iterable
+list0[:5] = 3,
+print(list0)    #[3, 6, 7, 8, 9, 10]
+# list0 = 3,5
+# print(list0)    #(3, 5)
+list0[:5] = 3,5,7
+print(list0)    #[3, 5, 7, 10]
+list0[1:999] = 3,
+print(list0)    #[3, 3]
+解释 如果写 ：
+a = 1,
+print(a)    #(1,)
+带 【,】的其实是tuple，但是如果赋值给list的一段，就直接变成列表元素插入里面了； 只能是list的一段， 不能用相加【+】来计算
+
+95，for x in y： 格式， 对于y的数据形式，是多维数组的，可以直接给出匹配的数据形式在取得单个值，而且，用() 或者[]都可以
+例子：
+customers = [[1,2],[2,5],[4,3]]
+for x in pairwise(customers):
+print(x)
+for (arr1, time1), [arr2, time2] in pairwise(customers):
+print(arr1, time1, [arr2, time2])
+输出：
+([1, 2], [2, 5])
+([2, 5], [4, 3])
+1 2 [2, 5]
+2 5 [4, 3]
+#但一定要符合数据格式， 如果写 for arr1, time1, arr2, time2 in pairwise(customers):  就会报错
+96，神奇的差别： 同一道题， 如果用暴力， O(n**2)， Java和C++都能过，但python3会超时。。
+97，关于dict() 和 Counter()
+可以当做一样的使用，但是，如果是需要先建立key值在去运算的时候，Counter更方便
+因为 Counter 一个不存在的key ，  会直接 = 0， 而dict[不存在的key] 就会报错
+或者可以用 dict的方法.get(key, 0)  如果get不到key，就返回0  如果不加0，会返回 = None
+举例：
+dic[sums]=dic.get(sums,0)+1
+相当于： cou[sums] += 1
+98，bisect 的 key= 用法：
+print(bisect.bisect_left(range(1000000000000000), cars, key=fun))
+print(bisect.bisect_left(range(1000000000000000), cars))
+print(range(1000))
+l = range(1000)
+print(l,l[1],range(10)[9])
+##解释， cars就是数量值 比如100 ，  key = fun是对 range(1000000000000000) 做处理，原本的列表是range #range(10)可以直接当别表用，比如，输出range(10)[9]；    第一个结果是，把cars用二分法，排序到 fun(range(1000)) 中得到的结果
+补充  bisect  key = lambda
+例题:2861. 最大合金数
+return max(bisect_left(range(min(stock) + budget//min(cost) + 1), True, key=lambda x: sum(max(0, x * m - s) * c for m, s, c in zip(mc, stock, cost)) > budget)  for mc in composition) - 1
+例题:275. H 指数 II
+from bisect import *
+
+class Solution:
+def hIndex(self, citations) -> int:
+return bisect(range(len(citations)), 0, key = lambda x:citations[-x-1] <= x)
+#注意, leetcode里面, bisect_right可以直接用,但时bisect()不能直接用...
+
+99， 原地修改列表， inplace
+nums = nums[k:k+n] 是赋值，力扣不承认这是原地操作。    加上一个[:]就好了
+nums[:] = nums[k:k+n]
+100，题型: 拓扑排序       例题:课程表系列
+核心思想:  每个被锁住的对象 建立一个degree, +1 ,   再加一个解锁对应表;    degree == 0 的直接解锁,放入队列(列表) 按解锁表执行解锁,新产生的degree == 0 放入队列    key: 唯一性,由于锁定关系的唯一性,每个元素也只会被解锁一次,因此只在队列里过一次
+#补一下例题: https://leetcode.cn/problems/course-schedule-iv/solutions/
+#2024年5月6日10:47:49, 这个拓扑排序其实可以出板子的...
+
+2023年9月17日00:11:55,新学到的函数还是都记录下来吧, 说不定那一天就会想起来!
+101,  itertools.permutations(l, len(l))    全排列,给出所有排列的值   #不是组合
+来自题目:   2850. 将石头分散到网格图的最少移动次数      for p in itertools.permutations(l, len(l)):  ###itertools.permutations 全排列： 0点位置的全排列，分别派送给不同的多出源，然后累加计算出步骤数
+举例:print(list(itertools.permutations([1,2,3],2)))
+#[(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
+类似的 所有组合:
+print(list(itertools.combinations([1,2,3],2)))
+#[(1, 2), (1, 3), (2, 3)]
+2023年11月6日11:15:06, 补充  product()  可以用来更简便的写多重循环
+用法: from itertools import product
+for x in product(nums, repeat = 1):     #repeat = 1 则一重循环,就跟 for x in nums 没区别... 不过, x形式是: (3,)  只有一个元素的tuple, 不是直接数字,要注意一下.
+repeat == 2  ,相当于二重循环  而是满编的循环,如果想要 去除重复的话,不如用combinations.
+这么说来,product的应用和 permutations, combinations 很像.
+product第二种用法,可以组合两个列表,相当于二重循环:
+product('ab', range(3)) --> ('a',0) ('a',1) ('a',2) ('b',0) ('b',1) ('b',2)
+组合多重里列表,直接形成多重循环
+    product((0,1), (0,1), (0,1)) --> (0,0,0) (0,0,1) (0,1,0) (0,1,1) (1,0,0) ...
+#这种用法比使用repeat = x 更有用...
+
+102, 在最小里面取最大   这种问题常用方法:  二分法
+'看到「最大化最小值」或者「最小化最大值」就要想到二分答案，这是一个固定的套路。' https://leetcode.cn/problems/house-robber-iv/solutions/2093952/er-fen-da-an-dp-by-endlesscheng-m558/
+
+103,打表过题小技巧:  例如: 279. 完全平方数
+这道题用dp做的 O(n * n**1/2)  时间较长,  勉强能过,运行时间3000ms, 更好的方法是利用数学,「四平方和定理」:任意一个正整数都可以被表示为至多四个正整数的平方和。  进一步还有==4时的数字特征等等.
+但我这里要说的是,如果这题的数据再强一些,比如10**5,那么dp就tle了,但是其实是可以跑的,因此可以 令n = 10**5 ,自己本地跑一遍,然后print(dp)
+再把打出的表复制回解答里, return dp[n]       这样O(n)时间就过了
+放在本题,运行时间变成76ms,效果拔群...
+104,g = defaultdict(list)   #defaultdict 是 dict 的一个子类。通常 Python 中字典(dict)这种数据类型是通过键值对来存取的，当索引一个不存在的键时，就会引发 keyerror 异常。那么，defaultdict 就可以解决这个问题，它可以实现为不存的键值返回一个默认值。
+目前我的感觉,跟Counter() 没啥区别
+#还是有区别的: defaultdict(list) 可以直接把默认键值安排成 列表
+事实上, 里面的list 就是那个参数,表明default 是list;  也可以写, defaultdict(set)
+105,set() 里面无法按index取出一个元素,  .pop() 会弹出set中的任意一个元素
+
+106,字符串和列表的区别:    关联上我上次自己想出来的那个, 不会out of range的办法
+t = 'sdfsdfdf'
+# t = [1,2,3]
+print(t[:1],t[0], t[:1]==t[0])
+如果t是 str 那么跟简单, 因为str的格式本身相当于列表,就淡化了最后外面要不要加[]的区别
+107,建立链表类的一种新方法:
+class Node:
+__slots__ = 'prev', 'next', 'key', 'value', 'freq'
+
+def __init__(self, key = 0, val = 0):
+self.key = key
+self.value = val
+self.freq = 1   #新放入的,初始一次
+这是一个带prev 还有freq的双向,可以记录频率的链表; 但是还有key,跟普通的链表又不太一样...
+#__slots__ 写出的变量,可以直接当这个class Node的元素了
+next没有default值,所以如果在赋值前,直接引用会报错.    加上self.next = None           self.prev = None , 就好了
+##实测, __slots__ 好像没啥用   2023年11月13日14:51:34
+
+108,  刚发下, py使用 ;  就能把东西都写进一行里...
+#但是必须缩进的,不如for 套for ,还是要换行缩进的(当然,也可以用后置)
+
+109,reduce()  用于连续执行,有点像map, 但是可用于累加,连续&  python3的reduce函数属于functools库。
+from functools import reduce  #调用语法
+reduce(function, sequence[, initial]) -> value
+功能如函数名。function的参数为两个，如果不指定初始值，每次从最左边取出2个元素，传递给function执行，执行的结果插入序列的头部，继续执行，直到序列只有一个元素。
+reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])
+#结果是15
+#执行过程((((1+2)+3)+4)+5)    相当于 x = x + y
+#2024年5月8日10:11:25, 由于改成一行比较有用的, reduce 例题: https://leetcode.cn/problems/partition-equal-subset-sum/solutions/2769530/pyyi-xing-by-hato-8-uaur/
+例子:连续&  列表nums:
+reduce(iand, nums)
+ixor iand ior
+#注意, xor 和 ixor貌似还是有点区别的   i是inplace的操作
+##实际用起来倒是没啥区别...
+
+110,滑动窗口之类的问题, 判断, right -left 之后要不要+1 ?
+这样的问题, 可以代入特殊值来判断, 比如,令right = left 两个指针指向同一个元素, 这个时候 序列里只有一个元素,长度是1, 说明结果要+1, 不然的length = 0
+PS: 要用滑动窗口,需要列表有单调性, 放在这里就是,列表内元素都>0 ,  或者就用前缀和+哈希表
+例题:  和为K的子数组
+
+111,一种代替append, 给列表加元素的方法:
+a = [1,2,3,4]
+b = []
+for i in a:
+    b+=i,
+print(b)
+输出:
+[1]
+[1, 2]
+[1, 2, 3]
+[1, 2, 3, 4]
+
+112, 单调栈   例题:901. 股票价格跨度
+
+113, 一道dp题:    8028. 执行操作使两个字符串相等
+我本来的思路: 可以轻松的得到, s1, s2 字符不同的数量,和位置   然后用贪婪,但是贪不出来...
+任意的组合两个位置, 删掉这两个位置, ans+= min(x, p2-p1)  因为最大开销是x, 说明,计算两个字符间的间隔>x, 也只要付出x就可以了.
+如果这题没有这个开销上限限制,那么就成了求间距只和,线性的分组,然后sum就完事了; 返回两两距离之和的最小值
+正确做法(一种):
+使用动态规划,或者等价的dfs;    dfs, 以字母index, 进行操作1的数量, 还有前一个数字的执行策略 当参数,构造dfs函数, def dfs(i, j, preR):
+终止条件: index走到头
+分情况讨论:
+    a, 这一位的字符相同, 直接往后走
+    b,这一位的字符不同, 说明需要操作,  分情况: ba, 执行操作1, j+1, 开销加x  bb, 执行操作2 , 开销加1 下一位要取反 bc, 在j>0时,使用之前的机会, 没有开销
+三种情况取最小值.    如果正向的使用dfs, 等价于反向的dp
+1:1翻译那就是三维dp,还挺复杂的...    但是我看排名里,有人用一维dp就解决了:
+##取了一个反值, 然后, 使用的是位置信息列表p
+class Solution:
+    def minOperations(self, s1: str, s2: str, x: int) -> int:
+        p = []
+        n = len(s1)
+        for i in range(n):
+            if s1[i] != s2[i]:
+                p.append(i)
+        m = len(p)
+        if m % 2:
+            return -1
+        ans = x * (m // 2)
+        dp = [0] * (m + 1)
+        for i in range(m):
+            dp[i + 1] = max(dp[i + 1], dp[i])
+            if i + 2 <= m:
+                dp[i + 2] = max(dp[i + 2], dp[i] + x - (p[i + 1] - p[i]))
+        return ans - dp[m]
+
+114, 计算列表中所有点的间距:    例题, 2731. 移动机器人
+先sort列表 ,然后利用递推关系写通项公式   核心,  可以累加所有点的和, 取反 ,详见题解
+不然,列举所有两点差, 需要O n*n,  但是必须之后求和 ,就只要 O(n), 不过sort是 O(nlogn)
+
+115,找8题 :   550C  Divisibility by Eight
+我想要实现的精简答案,利用re:
+import re
+s=input()
+for i in range(0,1000,8):
+if re.search('.*'.join(str(i)),s):print('YES\n',i);quit() #
+print('NO')
+#利用quit() 可以相当于return
+
+116,给高维数组降维:
+例子:
+grid = [[1,2],[3,4],[2]]
+g= sum(grid,[])
+#sum函数的第二个参数是初始值 start, 之后目标列表grid里面的所有元素,都会往这个start上面加
+PS:  标准通用的写法:newlist = [i for j in range(len(oldlist)) for i in oldlist[j]]
+更简便:  newlist = [i for j in oldlist for i in j]
+##2024年5月26日09:30:31,  用sum给数组降维  写法很简单,但是,  **很费时间!!!    所以还是使用
+
+
+117, 四舍六入五成双
+Python3 的 round() 为四舍六入五成双
+
+118, 快速幂  用于计算次方非常大的计算
+而矩阵快速幂,可以超级加速!
+##主要,超级加速是要配合%mod使用的,因为计算的数字本身过大,也影响速度
+2024年1月17日09:59:45,  用法,
+直接 pow(a,b, mod)
+
+119, 程序计时  记录运行时间:
+from time import time
+start_time = time()
+``` 添加要计时的代码
+run_time = time() - start_time
+
+120,KMP算法    用于str匹配,
+参考题目  1910. 删除一个字符串中所有出现的给定子字符串
+题解:https://leetcode.cn/problems/remove-all-occurrences-of-a-substring/solutions/847225/shan-chu-yi-ge-zi-fu-chuan-zhong-suo-you-4j08/?envType=list&envId=m7X6xrui
+更好的:https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/
+另外,记录到板子里了,以后直接用!
+
+121,并查集    求无向图中  相互联通点的块数    例如,一共100个点, 第一块 50个点相连 第二块 25点, 三块 24点, 四块 1点  共100点
+2024年1月12日15:36:39, #连通图
+例题:2316. 统计无向图中无法互相到达点对数
+题解:https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/solutions/1625315/by-endlesscheng-7l50/?envType=daily-question&envId=2023-10-21
+并查集的板子: https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/solutions/2487673/tong-ji-wu-xiang-tu-zhong-wu-fa-hu-xiang-q5eh/?envType=daily-question&envId=2023-10-21
+里面的方法1  看起来有点复杂, 主要作用就是构建一个,相连拓扑结构
+
+122, 方便的小写字母集合:
+import string   # 导入string这个模块
+print(string.digits)  # 输出包含数字0~9的字符串
+print(string.ascii_letters)  # 包含所有字母(大写或小写)的字符串
+print(string.ascii_lowercase)  # 包含所有小写字母的字符串
+print(string.ascii_uppercase)  # 包含所有大写字母的字符串
+
+123,LCA板子   例题:2846. 边权重均等查询
+https://leetcode.cn/problems/minimum-edge-weight-equilibrium-queries-in-a-tree/solutions/2424060/lca-mo-ban-by-endlesscheng-j54b/
+
+124, 最小费用最大流 板子     2850. 将石头分散到网格图的最少移动次数
+https://leetcode.cn/problems/minimum-moves-to-spread-stones-over-grid/?envType=list&envId=c0v1S6X9
+Ford-Fulkerson算法.
+网络流下属的问题, 看视频:https://www.bilibili.com/video/BV1Pv41157xh/? 讲的很清楚.     主要方法: 随机选出一条可行路径,然后要添加一条反向路径,(方便反悔)   poll, 知道再也没有可用的运输路径, 运出的总量就是最大流
+对2850题, 加上了制造管子的开销,于是就从 最大流问题,变成了最小费用最大流问题; 需要实现最大流,并且,还要求使用最小的费用搭建管道
+
+125,哨兵结点  一般写为 dummy  假人
+
+126,yield
+yield 关键字可以理解为将函数暂停，然后将 yield 后面的值返回，但是不会退出函数;    生成的是一个generator object            使用举例:
+def fun(x):
+# while x < 5:
+while 1:
+yield x
+        x += 1
+
+a = 0
+b = fun(a)
+for x in b:
+print(x)
+127, dp类问题, 使用@cache 加def dfs(): , 也就是递归的速度通常比 使用dp列表, 也就是迭代的速度慢
+但是复杂度是一样的
+
+128, 题型:  树形dp   树上dp  100108. 收集所有金币可获得的最大积分
+https://leetcode.cn/problems/maximum-points-after-collecting-coins-from-all-nodes/description/
+https://www.bilibili.com/video/BV1tw411q7VZ/?vd_source=c3405c73656cbabbc56a2be0b4a50004    第四题
+代码:
+class Solution:
+def maximumPoints(self, edges: List[List[int]], coins: List[int], k: int) -> int:
+        path = [[] for _ in coins]
+for a, b in edges:
+            path[a] += b,
+path[b] += a,
+#dfs
+@cache
+def dfs(i = 0, j= 0, fa = -1):  #fa是父节点,用来防止往回走; i = 0 0结点是入口; j是走了几次//2
+res1 = (coins[i] >> j) - k
+            res2 = coins[i] >> (j + 1)  #用方法二收集 j+1
+for to in path[i]:
+if to != fa:    #保证单向走 ##注意,这一种常用无向树,防止往回走的方法
+res1 += dfs(to, j, i)
+if j < 13:  #如果j太大,结点金币数一定被缩成0
+res2 += dfs(to, j+1, i)
+return max(res1, res2)
+
+return dfs()
+#注意  dfs函数里面添加 fa = -1 代表father结点 ,然后,在拓扑图往下走的时候, 判断if to != fa:是一种常用的防止dfs往回走的方法
+用visit建个列表也可以,走过的visit打上tag     #注意,visit在外部的话,没法和@cache连用
+
+129,内向基环树     拓扑排序的延伸
+例题:2127. 参加会议的最多员工数
+题解:https://leetcode.cn/problems/maximum-employees-to-be-invited-to-a-meeting/solutions/1187830/nei-xiang-ji-huan-shu-tuo-bu-pai-xu-fen-c1i1b/
+
+130, 固定间隔,数字满足固定值   例题: 2919. 使数组变美的最小增量运算数     类型: DP
+题解:https://leetcode.cn/problems/minimum-increment-operations-to-make-array-beautiful/solutions/2503157/qiao-miao-she-ji-zhuang-tai-xuan-huo-bu-8547u/?envType=list&envId=c0v1S6X9
+
+131,product()  可以用来更简便的写多重循环
+用法: from itertools import product
+for x in product(nums, repeat = 1):     #repeat = 1 则一重循环,就跟 for x in nums 没区别... 不过, x形式是: (3,)  只有一个元素的tuple, 不是直接数字,要注意一下.
+repeat == 2  ,相当于二重循环  而是满编的循环,如果想要 去除重复的话,不如用combinations.
+这么说来,product的应用和 permutations, combinations 很像.
+2024年1月17日22:04:24,
+for i, j in product(range(3),range(7)):
+print(i,j)
+会给出所有的组合
+a = [1, 2, 3, 1]
+for i, j, k in product(range(3), range(7), a):
+print(i, j, k)
+多层也行
+#相比zip的单对单列举,这个是列举所有组合
+
+132,质数打表:
+MX = 10 ** 6 + 1
+primes = []
+is_prime = [False, False] + [True] * (MX - 2)
+for i in range(2, MX):
+    if is_prime[i]:
+        primes.append(i)
+        for j in range(i * i, MX, i):
+            is_prime[j] = False
+使用方法:   判断x是不是质数= if  is_prime[x]:
+
+133,关于return  xx if station else y  式输出, 和海豹型式:
+例子:
+return ans if (ans := bisect_right(range(m*n+2), -1, key = lambda x: -check(x)) - 1) <= m*n else 10 **9
+#if写在ans 后面,但其实先执行的是if   所以,海豹型要写在if 后面
+这个句式其实是,
+if ans < ...:
+    return ans
+else 10 **9
+补充, 同样的来自本题目,  2258. 逃离火灾
+链接: https://leetcode.cn/problems/escape-the-spreading-fire/solutions/1460794/er-fen-bfspythonjavacgo-by-endlesscheng-ypp1/
+一种记录二维列表里,一种格子值的方法:
+fire_pos = [(i, j) for i, row in enumerate(grid) for j, x in enumerate(row) if x == 1]  #记录有火的格子
+
+134,xrange和range区别
+python中 xrange用法与range完全相同，不同的是生成的不是一个list对象，而是一个生成器, 在生成很大的数字序列时候，用xrange会比range性能优很多，因为不需要一上来就开辟一块很大的内存空间
+
+135,pycharm  调试bug
+成因:  add inline watch中添加了 list.pop()等类似的代码    原理:  添加pop() 后,原本意图是查看计算结果,但是实际上, debugger直接把pop()给运行了,导致list变化,进一步产生错误
+在添加一些 inline watch之后, 一些变量在debug计算中出现了错误
+
+136, groupby 用法: 见题解: https://leetcode.cn/problems/count-number-of-homogenous-substrings/solutions/2031869/tong-ji-tong-gou-zi-zi-fu-chuan-de-shu-m-tw5m/?envType=list&envId=c0v1S6X9
+#注意 [1]需要list()
+#2023年11月21日09:56:27, 可以用来得出 相等值的连续长度
+
+137, 容斥原理:   A ∪ B ∪ C = A + B + C - A ∩ B - A ∩ C - B ∩ C + A ∩ B ∩ C
+A ∪ B  = A + B - A ∩ B
+下图: 五个元素的容斥
+
+#公式总结:  n个元素
+ans = C(n,1) - C(n,2) + C(n,3) - C(n,4) +...  (-1)^(n+1)C(n,n)
+2024年4月15日20:36:21, 我推导出出了写容斥原理的递推公式, 记录在模板里了
+遇到例题: https://leetcode.cn/problems/kth-smallest-amount-with-single-denomination-combination/solutions/ 上周排位赛第三题...
+
+148, 实测证明  在次方非常大的时候,使用
+a = 1<<(10**9)  比 a = 2**(10**9) 的速度快非常多(0.3s 与 4s)    并且,这个时候a非常大,已经难以print,  需要增加print最大字符, sys.set_int_max_str_digits(0) 并且,时间也长的离谱
+#但是比较这两个值的速度依然是非常快的
+##计算机print不出来,但是它知道
+
+149, 字典树  trie,, 没错,就是这么拼写的    见例题: 208. 实现 Trie (前缀树)
+https://leetcode.cn/problems/implement-trie-prefix-tree/solutions/717239/shi-xian-trie-qian-zhui-shu-by-leetcode-ti500/
+字典树应用于 XOR 计算, 也可以叫做  01 trie:  421. 数组中两个数的最大异或值
+https://leetcode.cn/problems/maximum-xor-of-two-numbers-in-an-array/
+
+
+150,Floyd 算法
+2023年11月14日08:51:47, 之前经常看到,今天刷题用于遇到了
+递归的写法:
+状态定义与状态转移方程
+定义 dfs(k,i,j) 表示从 i 到 j 的最短路长度，并且这条最短路的中间节点编号都 ≤k。注意中间节点不包含 i 和 j。
+dfs(k,i,j) = min(dfs(k−1,i,j),dfs(k−1,i,k)+dfs(k−1,k,j))
+例题:https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/solutions/2525946/dai-ni-fa-ming-floyd-suan-fa-cong-ji-yi-m8s51/?envType=daily-question&envId=2023-11-16
+
+151,str.maketrans() 函数 和  translate() 联合使用, 做表和查表
+class Solution:
+def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        tab = str.maketrans("0123456789", "".join(map(str,mapping)))
+return sorted(nums, key = lambda x: int(str(x).translate(tab)))
+        return sorted(nums, key = lambda x: int(str(x).translate(tab if "tab" in globals() else  (tab:= str.maketrans("0123456789", "".join(map(str,mapping)))))))
+
+例题: https://leetcode.cn/problems/sort-the-jumbled-numbers/
+
+152, 判断一个变量是否存在:
+if 'x' in globals():
+配合海豹可以做单次复制, 用来写 python一行   但是,注意,每次判断if 'x' in globals() 也需要时间,需要和 复制计算中的运算量做一个比较...
+return x if 'x' in globals() else (x:= fun(xx))
+##2023年11月30日10:56:20,但是, 力扣的答题代码都在一个solution里面,并不是在globals()里
+所以应该使用  in locals()
+举例:
+class Solution:
+def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+return min([max( (dct if 'dct' in locals() else (dct := dict((arr[i],i) for i in range(len(arr)))))[x]  for x in t) for t in mat + [x for x in zip(*mat)]])
+需要额外加上每次判断 in locals的开销,但基本可以接受; 利用:=使得复杂的计算和赋值只进行一次
+#2023年12月1日08:49:11,看到另外一种方法:
+class Solution:
+def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+return min(map(max, map(partial(map, {x: k for k, x in enumerate(arr)}.get), chain(mat, zip(*mat)))))
+#chain() 就是把两个列表-iterables, 连起来,相当于 []+[];
+partial()更加复杂.
+##idx = {x: k for k, x in enumerate(arr)}.get 并不是 字典,而是  <built-in method get of dict object at 0x000001CB32D9F900>
+
+
+153, 题型:  给两个数字列表,  要求是分别大于两个值,然后求最大和值:
+例题: 2736. 最大和查询  https://leetcode.cn/problems/maximum-sum-queries/solutions/2305395/pai-xu-dan-diao-zhan-shang-er-fen-by-end-of9h/
+# p = bisect_left(st, (y,)) 直接 bisect查询二维数据, 比较第一位
+##本题目相当于一个二维排序, 二分查询
+#二维偏序问题   学名  https://leetcode.cn/problems/maximum-sum-queries/solutions/2530182/python3javacgotypescript-yi-ti-yi-jie-sh-pj6p/
+二维偏序的一般解决方法是排序一维，用数据结构处理第二维（这种数据结构一般是树状数组）。
+
+154, 题型: 如何在背包dp的时候,返回选择编号:
+例题: 689. 三个无重叠子数组的最大和   https://leetcode.cn/problems/maximum-sum-of-3-non-overlapping-subarrays/
+##dp的初始条件还是要注意下,  对于这题,定义成-inf是必须的.    实在想不出来,就自己画个二维列表填一下,然后就知道怎么初始化了.
+方法二, 三个滑窗
+
+155,格式化输出  %02d
+实例: '%02d' % a      把a这个数字表示成两位数的十进制  str   前面补零;  用于输出时间
+def totime(x):    #x: (1,2) - > "01:02"
+            if x[0] < 0: return ''
+            # h = str(x[0]) if x[0]>= 10 else '0' + str(x[0])
+            # m = str(x[1]) if x[1]>= 10 else '0' + str(x[1])
+            return '%02d' % x[0] + ':' + '%02d' % x[1]
+
+156,几个贡献法例题:
+2262. 字符串的总引力   进阶: 828. 统计子串中的唯一字符
+907. 子数组的最小值之和    相同- 2104. 子数组范围和
+
+157,特殊题目 :  2945. 找到最大非递减数组的长度
+题解: 用单调队列优化 DP    https://leetcode.cn/problems/find-maximum-non-decreasing-array-length/solutions/2542102/dan-diao-dui-lie-you-hua-dp-by-endlessch-j5qd/
+
+## 机器学习&算法(1)  第二本
+2023年12月5日09:47:40
+
+继续 -  机器学习&算法
+之前的笔记因为内容太多,导致在进行编辑会有卡顿...
+所以没办法,只要新建一个笔记了.
+
+(158)
+1, count(n)     其实需要from itertools import count
+返回 n,n+1,n+2 ...  一直到无限     相当于一个无限长的列表;  因此,要配合break使用
+2,判断一串字符是字母?
+x.isalpha()    注意,x必须是str
+isalnum    Return True if the string is an alpha-numeric string
+isdecimal    Return True if the string is a decimal string
+.isdigit()  可以有先导0,大概
+isupper   islower 还能判断大小写
+#相比 ascii_upper 之类,emmm,也差不多
+3, python 重复定义同名函数 可以直接覆盖之前定义的函数
+#不过,要注意一下作用域的问题
+##大抵上,就更不同作用域里的参数一样
+例子: https://leetcode.cn/problems/minimize-the-total-price-of-the-trips/
+在一棵 连通无环树 上,寻找 trips里从stt 到 edd的路径,并且记录经过次数
+通过重新定义dfs函数,而减少了一个递归里固定,但循环中会变化的参数 end
+如果放到最外面 g cnt也需要传参,  #作用有些类似 不用写partial 而发挥了减少传入参数的作用
+具体:
+        for stt, end in trips:
+            defdfs(x = 0, fa = -1):
+                if x == end:
+                    cnt[x] += 1
+                    returnTrue
+                for y in g[x]:
+                    if y != fa and dfs(y, x):
+                        cnt[x] += 1
+                        returnTrue
+                returnFalse   #没找到
+            dfs(stt, -1)
+4,想清楚了一个不算难的老问题:
+for l in range(n):
+    for r in range(l, n):
+这这种第二圈缩减的双循环 , 为什么也是O(n**2)
+答:  这种其实相当于  n + n-1 + n-2 + ... + 2 + 1
+=  n*(n+1)//2        换算一下就是n**2
+5,手写 max 效率确实更高
+实例:   https://leetcode.cn/problems/length-of-the-longest-subsequence-that-sums-to-target/
+2915. 和为目标值的最长子序列的长度
+                # dp[j] = max(dp[j],dp[j-num] + 1)    #取最大的,也就是装的最多的
+                if dp[j] < dp[j-num] + 1:
+                    dp[j] = dp[j-num] + 1
+时间上相差了三倍, max需要3s,而手写max只要1s
+6,图题   最好写法
+例题: https://leetcode.cn/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/solutions/2557328/die-dai-he-di-gui-by-hato-8-rzlk/
+1466. 重新规划路线
+迭代和递归写法
+#迭代, 使用seen是最方便的,不然还要remove来出去连过的点
+
+7, 常用思路, 如果 @ cache  + dfs  超时了,那么,就可能需要缩减dfs函数里的参数个数.    如果dfs(i),即只有一个参数的时候,还是超时,那恐怕必须要改成迭代了
+8, 状态压缩:
+枚举存在or 不存在的状态,用一个二进制数表示
+例如 0000 到 1111
+其间所有的数,就表示了4个点,有或者没有的 2 ** 4 = 16 种状态
+##2024年2月20日18:22:41,这个应该并不是状态压缩,这是用二进制表示了状态,方便以后操作..
+
+9, %x 运算的复杂度,似乎就是1,  可能使用的是辗转求余数方法,总之算的很快
+例题: https://codeforces.com/problemset/problem/1542/B
+B. Plus and Multiply
+做法:  若x是一个解,则x%b = a**n % b ,初始x = 1 判断 (n-x)%b == 0 , 不断 x *= a 直到 x > n, 找不到解
+10,Floyd 板子    用途: 寻找两点之前的最短距离
+#Floyd 对单向也是正确的
+例题: 100140. 关闭分部的可行集合数目
+https://leetcode.cn/problems/number-of-possible-sets-of-closing-branches/description/
+板子:
+class Solution:
+def numberOfSets(self, n: int, maxD: int, roads: List[List[int]]) -> int:
+        #建立w矩阵 w[f][t]  为f,t之间的最短距离
+        w = [[10**5+1]* n for _ in range(n)]
+for f, t, ww in roads: w[f][t] = w[t][f] = min(ww, w[f][t])
+        ap = []
+for k in range(2, n+1):
+            ap += list(combinations(range(n), k))
+        cnt = 1 + n
+for x in ap:
+# f = w #!!!!!!!!!
+f = deepcopy(w)
+            #这里x为用到的点集,普通的话,只要扫range就好
+            #扫完之后会得到 i, j之间的最短路径(k是中间量, 三重循环得到最终结果矩阵)
+for k in x:
+for i in x:
+for j in x:
+                        f[i][j] = min(f[i][j], f[i][k]+ f[k][j])
+            fl = 1
+for i in x:
+if fl == 0: break
+                for j in x:
+if i != j:
+if f[i][j] > maxD:
+                            fl = 0
+break
+cnt += fl
+return cnt
+also: https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/solutions/2525946/dai-ni-fa-ming-floyd-suan-fa-cong-ji-yi-m8s51/
+上篇笔记的 150
+
+#mark  并查集.  我需要一个良好的板子
+11, 位运算小技巧
+num1 &= num1 - 1  # 最低的 1 变成 0
+num1 |= num1 + 1  # 最低的 0 变成 1
+12,二维前缀和模板
+https://leetcode.cn/circle/discuss/UUuRex/
+二维差分数组  例题: https://leetcode.cn/problems/stamping-the-grid/?envType=daily-question&envId=2023-12-14
+2132.贴邮票
+
+13, SortedDict                2023年12月16日10:57:50,还真的有这东西啊!!!
+from sortedcontainers import SortedDict
+使用例题: https://leetcode.cn/problems/count-integers-in-intervals/solutions/1495396/by-endlesscheng-clk2/
+2276. 统计区间中的整数数目
+排序的字典真的太好用辣!
+可以self.d.bisect_left(left)  直接在values里面二分查找,
+可以len(self.d)  得出字典中的元素对个数
+可以self.d.popitem(i)   直接弹出确定编号的 元素对
+更多区分:     也就是可以根据keys 或者 values 排序
+* :class:`SortedDict`
+* :class:`SortedKeysView`
+* :class:`SortedItemsView`
+* :class:`SortedValuesView`
+
+#顺便,还有一个 SortedSet
+
+2023年12月16日11:41:04, cf中,一些输出行前面有空格也没关系
+#不知道为什么,print("yeS\n", t) 这种输出,  下一行前面自带一个空格...
+原因: print('str1','str2')  输出后,系统就是会自动给一个 空格的  , 而 "\n"的空格给到了 "\n" 后面
+解决: print('first line','\n'+'second line')
+
+14,矩阵右旋转(顺时针)90度:   box = [*zip(*box[::-1])]
+box[:] = [row[::-1] for row in zip(*box)]   等价
+更正确: box[:] = [list(row[::-1]) for row in zip(*box)]      #多次执行,可以转 90度, 180度 270度
+注意, zip出来的东西是 tuple 也就是 () 包围的.  要想形式符合 []  那就要对zip包的[x]  for x in zip
+#*的作用就是单纯的解包  [1,2,3]  * 之后, 变成 1,2,3  没法单独付给一个值  也不可以 a,b,c = *[1,2,3]
+因为这种形式的赋值, 正确的使用方式就是 a,b,c = [1,2,3]        ##貌似单独*m 来开苞没有用, 只能配合着zip来用
+单独*x 可以print  但是不能单独写,不然 can't use starred expression here
+
+btw, 双星号**，用于展开字典。
+普通转置: box = list(zip(*box))
+
+15, ~  运算符
+按位翻转  实际  ~x  = -x - 1  对称性:  ~(-x-1) =   -(-x-1) - 1 = x+1-1 = x
+16,bisect 的唯一化:  以后,我只使用bisect_right
+转化:  >= 6    就是  > 5
+bisect逻辑    有一个列表, 里面的单调性 :     FFFFFFTTTTTTT   或者相反 ,  后者 0000000111111111总之都一相互转化
+二分就是能从这个队列中,以O(logn),而不是诶个找的O(n)复杂度的 ,   找到这个列表里的分界点   理论上, 可以找完   l=F  r = T,然后你可以自己选择要l 还是要 r , 不过就是序号相差1
+#猜别人想的数字,别人说,高了,低了  摒弃掉,对了的这个回答,就是二分法了
+17,avl树   平衡二叉搜索树     这个竟然没有记录???
+例题: https://leetcode.cn/problems/balance-a-binary-search-tree/solutions/241897/jiang-er-cha-sou-suo-shu-bian-ping-heng-by-leetcod/?envType=list&envId=m7X6xrui
+
+18,在力扣里看到了貌似很牛逼的答案:
+# Author: hqztrue
+# https://github.com/hqztrue/LeetCodeSolutions
+from ctypes import *
+import mmap
+from math import ceil
+from typing import List
+
+buf=mmap.mmap(-1,mmap.PAGESIZE,prot=mmap.PROT_READ|mmap.PROT_WRITE|mmap.PROT_EXEC)
+ftype=CFUNCTYPE(c_int,POINTER(c_int),c_int,c_int)
+fpointer=c_void_p.from_buffer(buf)
+f=ftype(addressof(fpointer))
+buf.write(
+b'\x89\xd3'  # mov ebx,edx
+b'\xb9\x00\x00\x00\x00'  # mov ecx,0
+b'\x48\x8d\x34\xb7'  # lea rsi,[rsi*4+rdi]
+    # begin:
+b'\x8b\x07'  # mov eax,DWORD PTR [rdi]
+b'\xba\x00\x00\x00\x00'  # mov edx,0
+b'\xf7\xfb'  # idiv ebx
+b'\x01\xc1'  # add ecx,eax
+b'\x48\x8d\x7f\x04'  # lea rdi,0x4[rdi]
+b'\x48\x39\xf7'  # cmp rdi,rsi
+b'\x74\x02'  # jz end
+b'\xeb\xea'  # jmp begin
+    # end:
+b'\x89\xc8'  # mov eax,ecx
+b'\xc3'  # ret
+)
+
+class Solution:
+def smallestDivisor(self, nums: List[int], threshold: int) -> int:
+        n = len(nums)
+        l, r = ceil(sum(nums) / threshold), ceil(max(nums) / floor(threshold / n))
+#nums = [x-1 for x in nums]
+a=(c_int*n)()
+for i in range(n): a[i]=nums[i]-1
+while l < r:
+            mid = (l + r) >> 1
+#cur = sum(n // mid for n in nums) + n
+cur = f(a,n,mid) + n
+if cur > threshold:
+                l = mid + 1
+else:
+                r = mid
+return l
+上半部分这玩意, 不是机器码么???
+来自:https://leetcode.cn/problems/find-the-smallest-divisor-given-a-threshold/submissions/490318564/?envType=list&envId=m7X6xrui
+卧槽,莫非使用机器码优化了python的算法?     有些奇幻了...
+2023年12月21日14:36:45,只是先记在这里, 以后说不定还会看到.
+#查了一下 ctypes module的说明是 """create and manipulate C data types in Python"""   所以,猜测是利用了计算速度更快的C语言来计算
+19, eval()  函数  exec()  函数 ,都是用来执行 代码的执行函数
+举例: exec(int(input())*'print(1,input());')
+运行 第一个 input次的   '' 中的程序段
+20,a[:] 的速度要比 a  慢很多
+测试程序:
+from time import time
+
+a = [i for i in range(6*10**4)]
+s = time()
+for _ in a:
+    a
+print(1)
+e = time()
+print(1000*(e-s), "ms")
+s = time()
+for _ in a:
+    a[:]
+print(2)
+e = time()
+print(1000*(e-s), "ms")
+结果:
+0.99945068359375 ms
+7422.769069671631 ms
+ #1 0**5
+2.0003318786621094 ms
+23479.45284843445 ms
+速度相差万倍
+##所以,下次千万不要吧  a[:] 形式的列表写进循环里
+21,    一些优化写法:
+wait += customers[i] if i < len(customers) else 0  #免除了out of range; 相当于超出列表的部分,默认值为9
+up = wait if wait < 4 else 4   #限制了up最大为4
+c, l = divmod(wait,4)    #  divmod函数:  返回   整除,//的结果,和余数
+#不使用 defaultdict , 使用普通dict的初始化写写法:
+            if name in m:
+                t = m[name]
+                t[0] += view
+                if view > t[1] or view == t[1] andid < t[2]:
+                    t[1], t[2] = view, id
+            else: m[name] = [view, view, id]
+##只要判断一下新元素 是不是 in m (m为自己定义的字典)就可以了, 在里面就直接用值,不在就初始化
+22,利用 及时删除 Counter里面变为0的条目, 然后 通过len(cnt)来计数 哈希元素数量
+例题: https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+对于 Counter,
+cnt.pop(x)
+del cnt[x]
+都可以,但是, del更好,因为pop的x必须是cnt里面有的,不然会报错,但是del 的 x  cnt里面不一定有, 没有也没关系
+
+23,循环节    不常见题型
+例题:466. 统计重复个数  https://leetcode.cn/problems/count-the-repetitions/description/?envType=daily-question&envId=2024-01-02
+方法可以类似暴力  也可以考清楚循环部分后,用除法处理循环部分,    剩余部分依然暴力
+24,题型   字符型计算    也不常见
+例题 : 856. 括号的分数  https://leetcode.cn/problems/score-of-parentheses/?envType=list&envId=m7X6xrui
+classSolution:
+    defscoreOfParentheses(self, s: str) -> int:
+        ans = deep = 0
+        for i, c inenumerate(s):
+            deep += 1if c == "("else - 1  # += -1  也就是减一
+            if c == ')'and s[i - 1] == '(':  #只考虑()对  加法都满足结合律  所以相当这样
+                ans += 1 << deep
+        return ans
+25, Gosper's Hack
+用于枚举固定个数的  , 即 同 .bit_count() 的二级制串
+        u = 1 << len(mat[0])
+        subset = (1 << numSelect) - 1
+        while subset < u:
+            covered_rows = sum(row & subset == row for row in mask)
+            ans = max(ans, covered_rows)    #这两行是功能代码
+            lb = subset & -subset
+            x = subset + lb
+            subset = ((subset ^ x) // lb >> 2) | x
+        return ans
+例题: https://leetcode.cn/problems/maximum-rows-covered-by-columns/?envType=daily-question&envId=2024-01-04
+#感觉,用处不大,  我用combinations生成的一样用
+
+26,在单调栈的pop过程中, 能否利用其栈内数据的单调性使用bisect来一步到位的pop?
+2024年1月5日10:48:12
+灵茶: 这样做比直接 pop 更差，每次二分需要 O(log n) 的时间，但是单调栈已经做到均摊 O(1) 了。
+均摊,emmm, 因为无法对专门的数据使用bisect 如果对所有的数据都bisect
+#那么,就只有动态的选择方法, 比如当 stack内数据够多, 并且确定 需要弹出的结果也够多,才使用bisect更效率;   但是,这就类似与停机问题了,我们不可能在知道结果之前,知道使用那种方法更快, 而知道了结果之后,就说明已经选用了一种方法, 已经算完了, 那么这个时候还要进行方法的选择,已经毫无意义了.   即使使用近似的值,判断使用哪种计算方法,因为因为每次都需要if判断二增加额外的开销,
+
+27, Counter(m) >= Counter(r)
+  Counter的包含关系可以直接这样写,  就像 set一样
+等价于:
+        cr = Counter(r)
+        cm = Counter(m)
+        return  all(cr[x] <= cm[x] for x in cr)
+28, ##重要题型:  答案分裂成多个,然后继续去寻找下一个答案,  直到找到正确解为止:
+
+可以迭代,但如果不限制条件,一定会超过最大递归次数报错
+#能不能限制递归次数,然后必定返回现在已经算出的最小解?     似乎不靠谱,因为,超时可能发生于向着错误的方向越跑越远.    而递归有是不断发生的,错误的答案被优先计算了,导致算个没完...      所以,必须要限制条件,给错误方向终点, 即, return
+#如果每次分裂两个,似乎可以使用dp解决
+例题:100159. 使 X 和 Y 相等的最少操作次数  https://leetcode.cn/problems/minimum-number-of-operations-to-make-x-and-y-equal/description/
+该例题,每次分裂出4个新数字.
+我暂时的做法是,使用bfs,  每次筛选出  y < x 的可以进行  +1 , -1 *5 *11 操作,而对于  y > x的只能进行 - 1操作  并且,已经操作过的计入seen, 后续看到直接跳过 .   另外, y不能小与1
+#bfs适合这种最早返回, dfs没法控制返回点, 但是可以设置条件,让递归有限 (其实bfs也要注意控制范围)
+2024年1月8日12:30:34, 啊, 快速公交哪题还是搞不定啊...    貌似,这种就是用反向思考才不会超时,  用*x不行,就需要 n%x==0时, n//x, 才可以.
+
+29,math.dist(a,b)函数 , 直接计算欧式距离   a和b直接是坐标形式:(x,y)
+30,字符串分割匹配例题, 用动态规划考虑
+例题:https://leetcode.cn/problems/extra-characters-in-a-string/solutions/2286613/dong-tai-gui-hua-cong-ji-yi-hua-sou-suo-wtd7a/
+我一开始的考虑方向,是在dictionary里面选择,选或不选, 但这样是错误的,因为被dictionary挑剩下之后的s变成了分段的奇怪东西...
+正确做法,  给s分段,  从头到尾,能不能进d, 不能,这个头没救了,头要单独分割,  dfs(i)  转化到 dfs(i+1) + 1
+题解是反向的匹配,我自己写一个正向匹配
+#以后遇到str递归的题,就这样考虑,  从单走字符开始, 即tem = dfs(i+1) + 1
+31, 从数字段中,  抽出特殊数字可以组成的数的数量
+例题: https://leetcode.cn/problems/count-the-number-of-powerful-integers/solutions/2594013/bu-yong-shu-wei-dpde-ji-shu-fang-fa-by-f-vjbr/    2999. 统计强大整数的数目
+
+32, KMP 板子  :
+虚位以待..    搜索:  第一次出现位置    所有出现位置     所有出现次数     其实只要知道所有出现位置,其他的解就都有了
+def kmp(text: str, pattern: str) :
+    m = len(pattern)
+    pi = [0] * m
+    c = 0
+for i in range(1, m):
+        v = pattern[i]
+while c and pattern[c] != v:
+            c = pi[c - 1]
+if pattern[c] == v:
+            c += 1
+pi[i] = c
+
+    res = []
+    c = 0
+for i, v in enumerate(text):
+        v = text[i]
+while c and pattern[c] != v:
+            c = pi[c - 1]
+if pattern[c] == v:
+            c += 1
+if c == len(pattern):
+            res.append(i - m + 1)
+            c = pi[c - 1]
+return res
+33, numpy.base_repr(number, base=2, padding=0):
+ 把number用 base进制表示  最多到36位,因为 10+26个英文字母,最多36位...    padding是前面的0的个数
+巧妙的例题:https://atcoder.jp/contests/abc336/submissions/49289033
+34, 关于快速幂   结果要再除二时,需要特殊处理  不然可能多减去了半个mod
+例题: https://www.luogu.com.cn/problem/P10035
+il = lambda: list(map(int, input().split()))  #单个 n = i()[0]  列表 l = i() #input_list
+ix = lambda: il()[0] #单个数字  #input_x
+mod = 10**9 + 7
+t = ix()
+for i in range(t):
+    n = ix()
+print((pow(3,n,mod*2)-1)//2)
+# print((pow(3,n,mod*2)-1)//2 % mod)
+另外,这种数字巨大的,也只能想能不能用快速幂来做了...        还有解释,  mod和 除以几的操作 需要处理一下, 也就是在 pow的mod乘以几
+
+35,归并排序的应用
+例题:https://leetcode.cn/problems/count-of-range-sum/solutions/1256482/cpython3-0er-fen-1gui-bing-pai-xu-2shu-z-9dc4/
+327.区间和的个数
+36, 特殊题型: https://leetcode.cn/problems/minimum-time-to-make-array-sum-at-most-x/solutions/2374920/jiao-ni-yi-bu-bu-si-kao-ben-ti-by-endles-2eho/?envType=daily-question&envId=2024-01-19
+综合:  0-1背包   排序
+37, 通过两两交换完成排序的问题:
+例题: https://ac.nowcoder.com/acm/contest/73202/C
+#注意,不能使用find之类的东西, 需要O(n)的完成才行    需要hash记录一下...
+oo = old = [33,4,5,6,5,99,8,5]
+old_i = [(x,str(i)) for i,x in enumerate(old, 0)] #也可以从1开始计数,,,错误,这里的开始没有意义,只是唯一标志,与编号无关;注意str转化
+old = [b for a,b in old_i]
+new = [b for a,b in sorted(old_i)]
+print(old) #['0', '1', '2', '3', '4', '5', '6', '7']
+print(new) #['1', '2', '4', '7', '3', '6', '0', '5']
+#成功转化成了唯一str编号
+d = {}
+for i, x in enumerate(old):
+    d[i] = x
+    d[x] = i    #双向连接
+n = len(old)
+ans = []
+for i in range(n):
+if old[i] != new[i]:
+        find = d[new[i]]
+        goal = i  #因为从前往后进行,所以goal一定更小
+if i != find:   #相等不用交换
+ans += (i + 0, find + 0),   #这里的0才是关系到编号起点
+#更新d的信息:  原本: d[i]对应old[i] d[find]对应new[find]
+        #乱了,定位到了混乱点!!!
+        #抓住重点!  需要更新的是d,也只有d   对应  d[find], d[goal] 是字母(str标志)  find和goal是编号
+d[find], d[goal] = d[goal], d[find]
+        d[d[goal]], d[d[find]] = goal, find   #更新反向连接
+print(ans) #[(0, 1), (1, 2), (2, 4), (3, 7), (4, 7), (5, 6), (6, 7)]
+#验证交换操作
+for g, t in ans:
+    oo[g], oo[t] = oo[t], oo[g]
+print(oo)   #验证完成,确实完成排序!
+#主要思路:  双向连接     可能存在更简便的做法
+38, 滑动窗口的问题,  维护一个列表,  千万不要用sum(list)  而是自己写值跟踪sum的变化
+例题:https://leetcode.cn/problems/divide-an-array-into-subarrays-with-minimum-cost-ii/solutions/2614067/liang-ge-you-xu-ji-he-wei-hu-qian-k-1-xi-zdzx/
+39,BIT 树状数组 计数用的一个经典例子:
+例题: https://leetcode.cn/problems/count-of-smaller-numbers-after-self/
+class BIT:
+def __init__(self, n):
+self.tree = [0] * n
+
+def add(self, x):
+while x < len(self.tree):
+self.tree[x] += 1   #这里默认加1了, 可以自己写想加几
+x += x & -x
+
+def query(self, x):     #query的本意是求和的;配合后面bit.query(mp[nums[i]] - 1),意思是寻找更小的位置的和, 等价于 在SortedList二分找小于自己的元素的个数
+res = 0
+while x > 0:
+            res += self.tree[x]
+            x &= x - 1
+return res
+
+class Solution:
+def countSmaller(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        ans = [-1] * n
+        j = 1
+mp = {}
+for x in sorted(nums):  # 离散化
+if x not in mp:
+                mp[x] = j
+                j += 1
+
+bit = BIT(j)
+for i in range(n - 1, -1, -1):
+            cnt = bit.query(mp[nums[i]] - 1)
+            ans[i] = cnt
+            bit.add(mp[nums[i]])
+return ans
+49, 十分生草的 面向答案形答案:  https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/description/
+res=iter([5,0,4,5,0,0,10,0,3,1,0,0,0,6,69,238952,245944,239528,238071,243863,245357,232477,248174,239969,236302,243878,236118,246432,244159,235994,245549,238683,242737,229317,251315,624875572,624912680,623674613,624368583,0,1249975000,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,2,1,2,2,2,1,3,2,1,0,4,5,5,1,0,4,0,4,0,3,7,8,9,8,3,2,1,3,5,7,5,5,7,9,9,8,7,3,5,5,16,14,5,11,8,9,12,13,4,7,7,7,16,14,9,6,17,9,5,16,23,17,13,22,10,17,16,17,23,18,24,21,18,24,27,30,18,17,24,625017023])classSolution:defreversePairs(self, nums: List[int])->int:returnnext(res)
+利用iter()结构 和 next()  实现按步骤给出答案,   如果oj会乱序测试就废了, 另外, 必被hack
+50,  树上dp例题:  https://ac.nowcoder.com/acm/contest/73760/E
+参考代码  :   #只处理 f列表   (dp列表) 而不需要返回值.
+n = ix()
+g = [[] for _ in range(n + 1)]
+for _ in range(n - 1):
+    a, b = il()
+    g[a] += b,
+g[b] += a,
+# print(g)
+f = [["a", "abaaba"] for _ in range(n + 1)]  #随便初始化
+
+
+def dfs(node, father):
+    f[node][0] = f[node][1] = 1
+for x in g[node]:
+if x != father:  # 不会往回走
+dfs(x, node)
+            f[node][0] = f[node][0] * f[x][1] % mod
+            f[node][1] = f[node][1] * (f[x][0] + f[x][1]) % mod
+
+
+dfs(1, -1)
+print((f[1][0] + f[1][1]) % mod)
+归,自底向上.  最后的子节点, 涂色是一种,不涂色是一种, 就这两种情况, 而它的父节点, 根据涂或不涂,结合它的情况就能算出总情况数
+51, 数学技巧,  乘法逆元 Multiplicative inverse modulo
+例题: https://ac.nowcoder.com/acm/contest/73760/F
+若x*a mod b = 1 ,则称 x 为 a mod b 的逆元.   在mod b 的情况下, x是a的逆元;
+更正式的:乘法逆元是指对于一个整数 a，如果存在一个整数 b，使得 a * b ≡ 1 (mod m)，其中 m 是一个正整数，那么 b 就是 a 的乘法逆元。这里的 ≡ 表示模运算。
+可由费马小定理得:   alt
+def inverse(x:int):
+return pow(x,MOD-2,MOD) #求逆元
+#需要配合快速幂使用
+核心:
+@cache
+def query(a,b,c,d):
+if a==c==0 or b==d==0 or a==b==0 or c==d==0:
+return 0
+ans=0
+if a>0:
+        ans+=(a*d)*query(a-1,b,c,d)%MOD
+if c>0:
+        ans+=b*c*query(a,b,c-1,d)%MOD
+    ans+=(a+b)*(c+d)%MOD
+    ans=ans*inverse(a*d+b*c)%MOD
+return ans
+52,中位数贪心
+例题:https://leetcode.cn/problems/5TxKeK/?envType=daily-question&envId=2024-02-01
+我的做法,  SortedList, 追踪前后数组的 sum 和 len
+53,二维条件排序:   # 二维偏序 2024年12月8日12:33:53
+points.sort(key = lambda p:(p[0], -p[1]))  #[0]正序 [1]倒序
+例题: https://leetcode.cn/problems/find-the-number-of-ways-to-place-people-ii/
+变体:https://codeforces.com/problemsets/acmsguru/problem/99999/512
+54,计算较大的数值问题, 涉及到%mod的,可能需要中间步骤就 处理%mod    也就是要在计算中跟中处理ans
+例题:https://atcoder.jp/contests/arc171/submissions/50018277
+一种处理方法:用两段长列表来占位, 有值或为0, 对应进行相应的处理  - 从1开始遍历, 是可填入的数字 count += 1 , 是可填的位置  ans = ans * count % mod; count -= 1
+55,动态规划 + 单调队列优化
+例题:  https://leetcode.cn/problems/jump-game-vi/solutions/2631981/yi-bu-bu-you-hua-cong-di-gui-dao-di-tui-84qn3/?envType=daily-question&envId=2024-02-05
+#dp还是要再研究一下的,用@cache + dfs 没法解决所有问题啊...
+56,  一个教训!
+在使用双重循环的时候:
+        for i in range(self.row):
+            for j in range(self.col):
+原本在但层循环里, i 的值可以随意改变,因为反正下次for i的时候,i会被重置.    但是, j循环了之后,  每次i必须要到j循环完,才能随便改, 而我提前改了i,就造成了一个错误!!!
+57,一道有趣的数学题:
+https://www.lanqiao.cn/problems/16576/learning/?contest_id=168
+原题: https://www.luogu.com.cn/problem/P9777
+使用 一步一步递推,不如使用  f(m)f(n) = f(m+n)+f(m-n)  可以O(logn)算出来.
+贴个代码:
+        def f(n):
+            if n == 0:
+                return 2
+            if n == 1:
+                return k
+            # if n & 1:
+            #     return (f(n >> 1) * f(n + 1 >> 1) - f(1) ) % m
+            # else:
+            #     return (f(n >> 1) ** 2 - f(0) ) % m
+            return (k*f(n-1) - f(n-2))%m
+注释掉的是正确解,坐下面写的使用递推公式.    虽然结果一样,但递推是O(n) 这个东西就很神奇.  用加法和用乘法的区别,最后变成了 n 和 logn的区别
+58, n个完全相同的球（球不可辨认），放入m个完全不同的盒子里   +  lucas定理:
+例题:https://codeforces.com/contest/1931/problem/G
+组合的答案: c(n+m-1,n)    原理见下图
+
+#实现中还有逆元: 费马小定理：如果a与p互质，那么a^(p-1) % p =1,可知a在模p意义下的乘法逆元是a^(p-2)
+59, 例题:https://codeforces.com/contest/1925/problem/B
+需要  x**0.5的复杂度,学到了...
+我原本的做法,  先找 x//n  再往回减1  在数字很大时, 还是相当于 O(n)了,不划算!   而在 i*i <=n的范围内,  x%i==0时, 同时考虑 i和 x//i 就是把这两个因数同时比较了...
+60,例题:https://codeforces.com/contest/1929/problem/F
+a, 遍历出bst     #BST的顺序遍历,其实就是我之前搞出来过的,硬核垂直顺序...
+b, 得出tree数组,每段 -1 都被包裹在两个值时间 , 使用题解的结论    这段的情况= c(r-l+len, len)
+例如  5   -1 -1 -1 -1 9  在5和 9 之间 4个未知  c(8,4) = 70  考虑结果很大,可能还要利用上次的lucas定理    emmm,这两题挨着的啊..
+## input = lambda: sys.stdin.readline().rstrip()   这句话很神奇...    更加神奇的是 普通py加上这句也能过了...
+2024年2月16日11:49:04,记录到板子里了,  [二叉树]下面 ,   [一种特殊的BST录入方式.py]
+61, Z 函数（扩展 KMP）
+例题:https://leetcode.cn/problems/minimum-time-to-revert-word-to-initial-state-ii/
+
+62,区间dp 例题:  https://leetcode.cn/problems/maximum-number-of-operations-with-the-same-score-ii/solutions/2643756/qu-jian-dp-de-tao-lu-pythonjavacgo-by-en-nynz/
+#O(n**2)其实很僵硬
+63,特殊解法 脑筋急转弯     3041. 修改数组后最大化数组中的连续元素数目
+题目: https://leetcode.cn/problems/maximize-consecutive-elements-in-an-array-after-modification/description/
+排序之后,决定一个值是不是要+1,  只有一种选择走向就好了  注意 d[x+1]要在d[x]前面,不然造成赋值混乱  类似, a = b, b= a带来的问题.  或者用a,b = b,a形式解决
+##问题分类: 见下图
+
+LIS就是最长递增子序列,与本题相同, 都是 dp选择 会影响到之后的 dp选择   ##emmm,那么dp, Dynamic Programming ,也可以叫做  discard, pick
+64,一个脑筋急转弯:  https://codeforces.com/contest/1927/problem/E
+题目大意:   正反正反的输出一1~n数列 #因为sum差不超过1,所以相隔k的数字一定是差值等于+1 或者 -1
+代码, 注意一下小技巧
+n, k = il()
+ans=[0]*n
+f, x, y, z = 1, 1, n, 0
+for _ in range(k):
+for i in range(z, n, k):    #形成第二阶段的循环
+if f: #奇偶奇偶, +1 -1 +1 -1
+ans[i] = x;x += 1;
+else:
+            ans[i] = y;y -= 1;
+    z += 1
+f ^= 1
+print(*ans) #*拆开,于是直接就把列表 拆成单个元素输出
+as an aside, 我自己想的那个 1 2 3 4 到头反向 5 6 7 8 ... 实现起来太复杂了,所以不如奇偶列本别从 1 和 n 开始
+65, 逆序对 应用的一道题   https://ac.nowcoder.com/acm/contest/73854/G
+本来我以为,在这里不能用 sortedlist代替bit了,结果看了答案,开始可以的...
+只不过, 答案的做法是将gcd按照值分桶了, 分出 gcd = i值的数字 ,
+比如  1-50  i = 7  就只有 7, 14, 21, 28, 35, 42, 49 在里面,  然后计算这个 i = 7的逆序对个数,   把这些gcd不等于1的都刨除,剩下的就是gcd=1的逆序对
+#注意到  14, 28 ,42 组成的逆序对,在i=2的时候就已经考虑过了,所以需要做下面的处理:
+print(dp)
+for i in range(n, 0, -1):
+for j in range(i * 2, n + 1, i):
+        dp[i] -= dp[j]
+print(dp[1])
+完整代码:
+import sys
+
+n = int(input())
+lst = [int(x) for x in input().split()]
+vec = [[] ]
+print(vec)
+for _ in range(n):
+    vec.append([])
+print(vec)
+for x in lst:
+    i = 1
+while (i * i <= x):
+if (x % i == 0):
+            vec[i].append(x)
+if (i * i != x):
+                vec[x // i].append(x)
+        i += 1
+dp = [0]
+c = [0] * (n + 1)
+print(vec)
+
+def lowbit(x):
+return x & (-x)
+
+
+def getsum(x):  # a[1]..a[x]的和
+ans = 0
+while x > 0:
+        ans = ans + c[x]
+        x = x - lowbit(x)
+return ans
+
+
+def add(x, k):
+while x <= n:  # 不能越界
+c[x] = c[x] + k
+        x = x + lowbit(x)
+
+
+for i, lst in enumerate(vec):
+if (i == 0):
+continue
+    for j in range(0, n // i + 1):
+        c[j] = 0
+ans = 0
+num = 0
+for x in lst:
+        num += 1
+add(x // i, 1)
+        ans += num - getsum(x // i)
+    dp.append(ans)
+print(dp)
+for i in range(n, 0, -1):
+for j in range(i * 2, n + 1, i):
+        dp[i] -= dp[j]
+print(dp, i, j)
+print(dp[1])
+print(dp)
+2024年2月20日22:45:27,另外,我再收录一个逆序对的板子,拿计算速度最快的,那应该还是用bit,  sl用在这里就可能会微妙的超时...
+##好家伙,原来只要把sl的使用倒过来,速度是差不多的...
+###2024年2月20日22:59:54,非常生草,  速度差距来自:
+ bisect_left(sl,record[i])  和 sl.bisect_left(record[i])
+大概是 sl的bisect_left 是一种特别的东西吧...
+####知识点: sl 的 bisect_left是特供的
+66, 03xf在 class 里面加 slot是有道理的,  确实可以加快一点速度.
+例子: https://leetcode.cn/problems/count-prefix-and-suffix-pairs-ii/solutions/2644160/z-han-shu-zi-dian-shu-pythonjavacgo-by-e-5c2v/
+class Node:
+    __slots__ = 'son', 'cnt'
+
+    def __init__(self):
+        self.son = dict()
+        self.cnt = 0
+另外,这道题是一个字典树的应用.
+再另外,这题设计的有问题,  直接用python的str比较,速度更快.  O(n**1.5)比O(n)快10倍,很神奇...
+###emmm,感觉字典树的应用,并不是特别必要.    尤其是在python里面,字符串比较太快了,  对这道题,O(n**1.5)比O(n)快10倍,很神奇...
+67, 对 二叉搜索树使用垂序遍历 ,可以得到排好序的列表:
+输入 : root 为二叉搜索树根节点
+        run = []
+        ans = []
+        while run or root:
+            while root:
+                run += root,
+                root = root.left
+            root = run.pop()
+            ans += root.val,
+            root = root.right
+        return ans
+2024年2月24日09:39:29,等等,不对劲了, 看到题解说了 , 二叉搜索树的 中序遍历就是 有序列表, 那不是说明我的垂序遍历其实就是中序遍历?
+##卧槽,验证了, 就是一个东西...
+那以后,直接用中序遍历就完事了...
+68, 前缀和 + 正反向遍历 + 二分查找  的一道题   单独看起来不难,但是加入了分情况处理的小细节
+https://codeforces.com/contest/1923/problem/D
+答案:  https://codeforces.com/contest/1923/my    #248044382
+方便处理的优化:  将相等的值的id都归类到最后, 这样就不用找了
+#这道题我昨天在竞赛时就想出方法了,但是感觉实现起来写的太麻烦...   硬实力不够,就算写完也花太多时间了
+69, 一道偏数学问题:  1932E - Final Countdown
+https://codeforces.com/contest/1932/problem/E
+看题解没看懂,但是一看程序就懂了.     利用一个前缀和列表,实现了局部的进位, 让大数字计算转化成 n个小数位计算, emmm,是我之前想到的思路,当我当时不知道怎么实现...
+#还要注意一下特别的优化  比如例子17,前面全是0.    使用先看好的 [0]*n会比  我常用的 pres+= t, 快.  当n很大的时候,动态的扩充列表就很浪费时间了,所以,还是静态的先设置好列表的大小最稳妥
+答案: https://codeforces.com/contest/1932/my
+70,set里面不能放list的原因:  set里的元素,必须是不可改变的    tuple就不定义之后不可变的, 只能重新赋值
+71,换根dp   例题: https://leetcode.cn/problems/sum-of-distances-in-tree/solutions/2345592/tu-jie-yi-zhang-tu-miao-dong-huan-gen-dp-6bgb/
+2024年3月30日20:46:26, 增加例题 : 2581. 统计可能的树根数目 https://leetcode.cn/problems/count-number-of-possible-root-nodes/
+不过,这个换根dp的模板不太好些啊...       草莓奶昔倒是写了一套模板,但是很复杂...  https://github.com/981377660LMT/algorithm-study/blob/master/6_tree/%E7%BB%8F%E5%85%B8%E9%A2%98/%E5%90%8E%E5%BA%8Fdfs%E7%BB%9F%E8%AE%A1%E4%BF%A1%E6%81%AF/%E6%8D%A2%E6%A0%B9dp/Rerooting.py
+
+72,sort的第二种 key = lambda形式   加入的函数为  s.sort(key=cmp_to_key(mycmp))
+其中:   cmp_to_key 为固定,  mycmp是自己写的比较函数  形式为  def mycmp(x,y):
+例如:
+def mycmp(x,y):
+if x+y > y+x:
+return 1
+elif x+y < y+x:
+return -1
+else:
+return 0
+每次单独比较x和y的大小,最终形成整成的大小排序
+# 对sort函数, 利用分别比较两个值的规则来排序
+
+73, 硬币问题, 两道 dp题
+原题: 322. 零钱兑换   https://leetcode.cn/problems/coin-change/description/
+         518. 零钱兑换 II   https://leetcode.cn/problems/coin-change-ii/
+2024年3月30日10:16:25, 增加,  硬币问题, 思考归纳:  2952. 需要添加的硬币的最小数量  (那场ea):https://leetcode.cn/problems/minimum-number-of-coins-to-be-added/description/?envType=daily-question&envId=2024-03-30
+
+74,Callable
+例如: Callable[[int], T]   表示这个参数进入的是一个可调用的, 比如一个fun, 然后这个fun 的输入是一个 int , 输出是一个 Generic[T]
+#Generic[T] 一种泛用的类型,貌似是方便注释,说明文档用的
+注意:  在函数里,调用参数的时候,可以调用别的函数
+举例:
+from typing import Callable
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+def main(fn: Callable[[int, int], int], a: int, b: int):
+return fn(a, b)
+
+if __name__ == '__main__':
+print(main(add, 10, 2))
+修改一下,就实现了 add = add  但是前面的add是 函数参数, 后面的add是 已经定义好的默认函数
+def add(a: int, b: int) -> int:
+return a + b
+def sub(a: int, b: int) -> int:
+return a - b
+def main(add = add, a = 0, b = 99):
+return add(a, b)
+
+if __name__ == '__main__':
+print(main(sub, 10, 2))
+输出为8,  功能正常...
+注意,对有默认值的函数, 可以在调用时规定好赋值,而不遵守定义是的顺序:
+def add(a: int, b: int) -> int:
+return a + b
+def sub(a: int, b: int) -> int:
+return a - b
+# def main(a: int = 0, b = 99, add: Callable[[int, int], int] = add ):
+def main(add = add,  a = 0, b = 99 ):
+return add(a, b)
+
+if __name__ == '__main__':
+print(main(add, 10, 2))
+print(main(b = 10, a = 2, add = add))
+as an aside:   函数默认参数,  调用时的问题.
+def fun(a = 5,b=6):
+print(a+b)
+# return a + b
+
+fun()
+fun(a = 1, b = 8)
+fun(4)
+fun(1,2)
+# fun(1, a=2) #fun() got multiple values for argument 'a'
+fun(1, b=2)
+# fun(a = 5, 5)  #错误 :positional argument follows keyword argument, 如果你使用了关键字参数，那么它之后的所有参数都必须使用关键字参数形式传递。
+fun(b = 3)
+使用了关键参数,后面就不能再进 普通按位置参数 了, 就像定义这种函数的时候一样,前面可以是没有默认值的参数, 而开始有默认值之后,后面的参数必须都是带默认值的
+
+75, list 的 pop(0) 会比deque 的 popleft慢很多 ,但是 SortedList 的 pop(0)  貌似还挺快的...
+76, n数之和 问题  ,  两数之和的扩展, 力扣上最多问道 4数之和
+2024年3月30日20:19:15, 虚位以待...
+本来是做这个题  3082. 求出所有子序列的能量和   https://leetcode.cn/problems/find-the-sum-of-the-power-of-all-subsequences/description/   的时候想到的,但是看了0x的题解,  枚举长度类似于01背包  做dp
+
+77, 曼哈顿距离排序:
+例题: https://leetcode.cn/problems/minimize-manhattan-distances/
+曼哈顿距离处理技巧: https://www.bilibili.com/video/BV1fq421A7CY/   旋转,去掉绝对值
+#上面其实推导了一个经典结论：曼哈顿距离在坐标轴旋转 45 度后与切比雪夫距离等价。
+
+
+78,幺元   “幺元”是一个数学概念，它指的是在一个集合A中，对于一个二元运算“*”，如果存在一个元素e，它与其他任意元素x进行运算时，结果都是x本身，即e*x=x且x*e=x，那么元素e就是该集合中对于该二元运算的幺元。例如，在实数集R中，0是加法的幺元，而1是乘法的幺元。
+#幺元是相对运算来说的
+79, a += b  不等价于  a = a + b 的一种情况整理:
+a = []
+b = "dfdfdb"
+# a = a + b  #直接报错的!
+a += b
+print(a)
+#emmm,感觉其实这个语法有误,不过python默认把str给变成 iterable 了, 所以就可以执行了
+80, python语法  [] 中多重循环的拆解方式:
+例题:https://leetcode.cn/problems/all-possible-full-binary-trees/
+for i in range(2, MX):  # 计算 f[i]
+    # f[i] = [TreeNode(0, left, right) for j in range(1, i) for left in f[j] for right in f[i - j]]
+f[i] = []
+for j in range(1, i):
+for left in f[j]:
+for right in f[i - j]:
+                f[i] += [TreeNode(0, left, right)]
+按顺序拆解就行了
+81, python 的 max()  比较两个值取最大时,耗时高.    貌似是因为max要判断一下类型之类的    不如使用手动的 比较一下,然后赋值 ,有时候可以将运行时间缩减一倍
+实例:  https://www.bilibili.com/video/BV1Xr421J77b/   52:00
+82, 后缀自动机   sam  例题:   https://leetcode.cn/problems/shortest-uncommon-substring-in-an-array/solutions/2678477/golang-yan-yi-hou-zhui-zi-dong-ji-hou-zh-5grn/
+sam比较困难, 目前我没有掌握
+2024年4月2日15:07:33,先跳过,回过头来看一遍iowiki, 尤其是其中的自动机部分
+
+83,subsequence subarray
+中文  subsequence 子序列   subarray 子数组
+子序列不需要连续  子数组要求连续
+84, 划分型dp   统一套路:   前i个数 划分成j个段
+例题:https://leetcode.cn/problems/maximum-strength-of-k-disjoint-subarrays/solutions/2678061/qian-zhui-he-hua-fen-xing-dpshi-zi-bian-ap5z5/
+85,货仓选址问题  结论是取中位数   #中位数贪心
+例题:https://leetcode.cn/problems/minimum-moves-to-pick-k-ones/  题解里有题单,中位数贪心 https://leetcode.cn/problems/minimum-moves-to-pick-k-ones/solutions/2692009/zhong-wei-shu-tan-xin-by-endlesscheng-h972/
+视频: https://www.bilibili.com/video/BV1RH4y1W7DP/
+
+86, SortedList  属于 有序集合
+在c++里 可以用 map  或者  multiset  在Java 里, TreeMap
+aaa: sl里删除一个固定元素 可以使用discard  ,  只会删一个, 而且, 不会触发
+.remove(x) 时 x不存在的报错
+87, 当我发现力扣上运行结果,和我本地的运行结果不一样的时候,  考虑是   作用域 混乱了 比如全局变量问题
+88, py怪问题:   递归形式影响运算速度的例子: 题目: 2316 https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/description/
+#btw, 之前的怪问题:  max(ans, tem)的手动加速
+89,使用 nsmallest()  记录前x个最小值 是O(n)的
+可以代替sort的 n log n 速度.
+#鬼才想法: 用 nsmallest(len(a), a)代替  sorted(a) 不就降低O了吗
+##问题:  nsmallest(k, a)的复杂度其实是kn 只不过k是常数,被约掉了, 而写nsmallest(len(a), a) 那就是 n^2
+from heapq import nsmallest, nlargest
+修正: 这个方法是属于heapq的,所以算是简化的heapq应用吧    另外,max()应该也是
+90,float 运算的误差处理:
+例题:1883. 准时抵达会议现场的最小跳过休息次数
+https://leetcode.cn/problems/minimum-skips-to-arrive-at-meeting-on-time/solutions/802990/minimum-skips-to-arrive-at-meeting-on-ti-dp7v
+91, 状态机
+一个很好的状态机例子:https://leetcode.cn/problems/count-the-number-of-special-characters-ii/solutions/2749235/zhuang-tai-ji-on-yi-ci-bian-li-pythonjav-ajaz/
+
+class Solution:
+def numberOfSpecialChars(self, word: str) -> int:
+        ans = 0
+state = [0] * 27  #
+for c in map(ord, word):
+            x = c & 31  # 转成数字 1~26
+if c & 32:  # 小写字母
+if state[x] == 0:
+                    state[x] = 1
+elif state[x] == 2:
+                    state[x] = -1
+ans -= 1
+else:  # 大写字母
+if state[x] == 0:
+                    state[x] = -1
+elif state[x] == 1:
+                    state[x] = 2
+ans += 1
+return ans
+92,容斥原理 应用于排列组合
+n个人分糖   例题: https://leetcode.cn/problems/distribute-candies-among-children-ii/solutions/2522969/o1-rong-chi-yuan-li-pythonjavacgo-by-end-2woj/
+2024年6月1日10:27:09,我自己添加了c个人分的情况.  容斥是可以走一种递推公式的,  comb, 类似与杨辉三角形
+#2024年6月1日11:32:39 另题:https://leetcode.cn/problems/number-of-strings-which-can-be-rearranged-to-contain-substring/solutions/2522964/olog-n-rong-chi-yuan-li-fu-ji-yi-hua-sou-okjf/
+n个字符中,存在a个c1字符, b个c2字符...的情况数   依然是容斥,但是不好写出通解...
+##似乎也可以通解:  在n字符中, 包含s的情况数;      Counter(s) 然后根据里面存在的 c:v 来做容斥
+#2024年5月11日17:35:56 ,新例题: https://leetcode.cn/contest/biweekly-contest-129/problems/find-all-possible-stable-binary-arrays-i/
+加入,隔板,小球的思考方式.
+###aaa, 在dfs的做法中,有一个教训:  dfs参数的方向要一致;  不然,参考我的错误写法:  return dfs(i + 1,j, 0) + max(dfs(i , j + 1, 1) - (dfs(i, j - limit, 1) ), 0)
++ 1 是下一个数字,  而－limit则往回了, 这样就大概率死循环了!!!!
+
+93,带开关的背包   例题: https://ac.nowcoder.com/acm/contest/80259/D
+相当于  要先确定购买这件商品  , 才能购买后续的n件附加商品(升级)
+商品在变化的dp
+# 用滚动数组 可以省一维  copy()是精髓;
+解决开关的方式就是在 遍历k的时候加一位 枚举j, j代表这个物品升级的数目, 从0到e(最大值)  还要给k不够的做个剪枝
+
+94, 枚举一列的写法:
+for col in  zip(*grid):
+
+95, 短板填补方法:  一个已经排序的数列 ,   把它看成一个木筒,
+现在给你数值k,  想知道可以把短板填补到的最大值,  并且返回使用了k里的多少数字
+例题: https://codeforces.com/contest/1972/problem/C
+遇到过,这应该是第二次了,类似的还有 ,带正负的问题, 所以可以开个板子了,就叫, 短板问题...    记得力扣遇到那次, k值小,还可以用sortedlist来枚举完成...
+
+96, python:为什么else与if不在同一列，也能输出结果？
+实际上是 for ..else...语句.   是python的中的一种用法，在while或者for循环之后还可以有else子句，作用是for循环中没有被break、return 等终止，则最后就执行else语句。
+举例:
+for i in range(10):
+    i
+else: print(1)
+
+97, 类公交车问题  例题: https://leetcode.cn/problems/minimum-number-of-days-to-eat-n-oranges/solutions/2773476/liang-chong-fang-fa-ji-yi-hua-sou-suo-zu-18jv/?envType=daily-question&envId=2024-05-12
+不要先考虑%mod, 而是取 return min(dfs(i // 2) + i % 2, dfs(i // 3) + i % 3) + 1     直接默认了能除开, 加上余数就好了
+
+98, accumulate() 与 reduce() 的区别:
+reduce() 连续计算, 只返回最后的结果
+而accumulate()会返回包含所有中间值的列表,因此可以用来取得前缀和列表
+例子:
+print(list(accumulate(nums, operator.add, initial= 0)))
+# 注意其中的 operator  , 所有的 "+"这样的操作符,也都有fun()形式, 见Python： operator --- 标准运算符替代函数   https://blog.csdn.net/weixin_45365220/article/details/108369303
+反正就 import operator
+99, 又想起了那道, k = 0 和 k = 1 必须分开讨论的题,还真是挺神奇的
+  3130. 找出所有稳定的二进制数组 II  https://leetcode.cn/problems/find-all-possible-stable-binary-arrays-ii/solutions/2758868/dong-tai-gui-hua-cong-ji-yi-hua-sou-suo-37jdi/
+
+100,  试填法系列问题:
+ 按难度正序排列:
+  421. 数组中两个数的最大异或值    https://leetcode.cn/problems/maximum-xor-of-two-numbers-in-an-array/description/
+  3007. 价值和小于等于 K 的最大数字   https://leetcode.cn/problems/maximum-number-that-sum-of-the-prices-is-less-than-or-equal-to-k/description/
+  3145. 大数组元素的乘积     https://leetcode.cn/problems/find-products-of-elements-of-big-array/description/
+##  数字非常大,  时间复杂度的判断不明显( 后两题)
+#核心思路: k太大(10**15)  因此用二进制考虑  10**15 = 2**50  log2(k) 之后, 只需要考虑50位 还可以乘以一个O(n)  毕竟50不算是很大的常数
+
+
+### 算法 #3  2024年9月14日22:19:09, 正在用的第三本笔记
+2024年5月23日13:24:32
+
+第三篇算法笔记, 之前的两篇在2023年里面
+
+1,状压dp  例题: 3149. 找出分数最低的排列
+https://leetcode.cn/problems/find-the-minimum-cost-array-permutation/solutions/2775272/zhuang-ya-dpcong-ji-yi-hua-sou-suo-dao-d-s9t5/
+set() 不是 hashable 所以用 二进制的数字, 位运算来代替set .
+另外,  看到 2 <= n == nums.length <= 14  ,这种比较小的值, 猜测使用 2**14的值来hash, 使用状压dp
+#本题还需要给出路径 ,注意第二部分的功能代码,   重复运行,但是不影响时间复杂度
+## 相邻相关排列行状压dp
+
+2, heapq的一个神奇特性:  对heapify的数列进行 sort(),  结果依然是正确的...
+也就是说,sort也是一种 heapq的排列方式
+
+3,  插空放积木问题:   https://leetcode.cn/problems/block-placement-queries/
+一种题解: https://leetcode.cn/circle/discuss/fnOpNA/view/vpkLAM/
+2024年5月26日22:00:44,上面的题解有问题, 可以hack
+## 线段树   + 模板
+#线段树的本质是2分,所以在线段树上二分很容易!
+线段树二分例题:  https://leetcode.cn/problems/booking-concert-tickets-in-groups/solutions/1523876/by-endlesscheng-okcu/
+2286. 以组为单位订音乐会的门票
+其他一些模板: https://blog.csdn.net/liuliangcan/article/details/124989532
+
+4,  ## 可以将自变量命名为  sum  max 等,但是问题就是,这样命名之后, 以后就不能使用 sum() max()函数了
+5, 用set运算代替为运算的好处:  更加有利于离散化   举个例子, 一个value很大, 1e19,这样 1<<1e19大概就直接寄了...
+例题:   https://leetcode.cn/problems/last-stone-weight-ii/
+完整测试程序:
+import sys
+from typing import List
+
+sys.set_int_max_str_digits(0)   #位运算要打出来的话超4300字符数
+# class Solution:
+#     def lastStoneWeightII(self, stones: List[int]) -> int:
+#         total = sum(stones)
+#         half, odd = divmod(total, 2)
+#         v = 1 << half
+#         for s in stones:  v |= v >> s
+#         print(bin(v))
+#         # print((v))
+#         return 2 * ((v & -v).bit_length() - 1) + odd   #lowbit = v & -v
+
+class Solution:
+def lastStoneWeightII(self, stones: List[int]) -> int:
+        dp = {0}
+        s = sum(stones)
+for a in stones:
+            dp |= {a + v for v in dp if a + v <= s//2}
+print(dp)
+return s - 2 * max(dp)
+
+nums = [10**19, 10**19 + 1,2,6,5,8,9,1]
+nums = [10**9, 10**9 + 1,2,6,5,8,9,1]
+nums = [10**5, 10**5 + 1,2,6,5,8,9,1]
+print(Solution().lastStoneWeightII(nums))
+2024年6月2日08:23:15,  在用set代替位运算的问题上, 还有一种, 位运算代表的数需要去进行 @cache 操作的情形,  但是set 是unhashable
+解决方法: 写 frozenset   就可以@cache了  而, frozenset 只是没有了add 而已,  只要写  fs | {x} 就可以代替 s.add(x) 操作(#2024年6月9日12:39:34, 补充, 如果是取出 直接fs - {x}就可以, 等价于 s.discard(x)  ) 只不过,运算速度比位运算慢了一倍, 例题:https://leetcode.cn/problems/find-the-minimum-cost-array-permutation/
+但是考虑到大离散化问题, ummm, 这个用cache的题,本身数据就需要非常小,不然O(n**2*2**n) n稍大就爆了,思路也用不到离散化...    但是总之,写set方式也行, 比 位运算更直观
+##2024年6月9日12:40:36  再 补充:  位运算的速度比 set快还是有用的 比如今天周赛的第四题, 我的方法已经对了,但是用的 set 来dp,结果就gg了..
+卧槽,现在想来,如果当时copy的是位运算版本的答案,不就直接过了...
+set更通用, 因为天生离散化   而bit更快
+例题: 3181. 执行操作可获得的最大总奖励 II
+https://leetcode.cn/problems/maximum-total-reward-using-operations-ii/description/
+
+6,  二维偏序问题   常用线段树解决
+例题:  https://www.lanqiao.cn/problems/18494/learning/?contest_id=189
+# 见下面笔记
+
+7, 内部大数据测试法:   举例:  自己用随机数填写一组测试数据, 貌似也只会被运行一次, 可以用来
+Solution().valueAfterKSeconds(1000000000000000,10000)
+更加完成的 内部数据测试:
+for i in range(100):
+    a= randint(1,1000000)
+    b= randint(1,a)
+print(a,b)
+print(Solution().valueAfterKSeconds(a, b))
+8,  for else 语句的一种取反形式:
+for ...
+else: continue
+break
+如果for里面跑过了break,就会再连续break一层  不然的话, 就会执行continue 而错过了break
+应用例题:  https://leetcode.cn/problems/maximum-good-people-based-on-statements/submissions/
+见我有备注的提交.
+# 算是一种很有趣的语法结构...   可用来打破两层循环; 跳出 双循环
+classSolution:
+    defmaximumGood(self, statements: List[List[int]]) -> int:
+        n = len(statements)
+        al = [i for i inrange(n)]
+        for i inrange(n, -1, -1):
+            for p in combinations(al, i):
+                for x in p:
+                    for j, st inenumerate(statements[x]):
+                        if st == 0and j in p or st == 1and j notin p: break# 矛盾
+                    else: continue
+                    break
+                else: return i
+## 这个逻辑真是太漂亮了!!!    以后都不用 flag判断了, 应该都可以用逻辑搞定的
+
+9, breakpoint() 命令, 直接插在代码里面,然后配合命令:
+一旦进入调试模式，你就可以使用pdb的命令来检查和修改变量了。这里有几个常用的命令：
+p 表达式：打印表达式的值。例如，p x将显示变量x的当前值。
+pp 表达式：以更易于阅读的方式打印表达式的值（pretty print）。
+n（next）：执行下一行代码。
+c（continue）：继续执行，直到遇到下一个断点。
+l（list）：显示当前正在执行的代码周围的几行。
+s（step）：进入函数。
+r（return）：继续执行，直到当前函数返回。
+q（quit）：退出调试器，结束程序执行。
+
+10,  奇奇怪怪的函数,  zfill, 字符串补前缀零专用,  数位dp专属...
+a = "adg"
+a = a.zfill(9)
+print(a)  #000000adg
++1,     .elements()
+>>> c = Counter('ABCABC')
+>>> sorted(c.elements())
+['A', 'A', 'B', 'B', 'C', 'C']
+
+11,AC自动机  Aho-Corasick automation    用来解决的问题: AC 自动机是一种基于 Trie 和 KMP 思想的多模式匹配算法，可以高效地解决字符串中包含多个模式串的问题。
+这里先开个坑, 等遇到了再弄个版子吧
+2024年7月7日12:48:36, 似乎是遇到了...
+
+12, 有a,b两个数,  有c个加数 ,可以自由分配到a,b, 有d个减数,可以自由分配给a,b, 求操作后最大的min(a,b)
+from cf题目: https://codeforces.com/contest/1989/problem/C
+我做了一个这道题没必要使用到的优化,因为数据范围不够,但是,确实有效...
+v0, v1, pos, neg = 168,346346,453,200000000
+
+if v0 < v1: v0, v1 = v1, v0
+# print(d1,d2, p, s)
+v1 += pos
+if v1 > v0:
+    v0, v1 = v0 + v1 - (v0 + v1) // 2, (v0 + v1) // 2
+if v0 < v1: v0, v1 = v1, v0
+v0 -= neg
+if v1 > v0:
+    v0, v1 = v0 + v1 - (v0 + v1) // 2, (v0 + v1) // 2
+print(min(v0, v1))
+13, 一个分段计算问题:   类似于 汽水瓶兑换, 但也不完全..
+举例, 我有100个瓶子, 当瓶子数大于50时, 每5个瓶子可以兑换1元钱, 瓶子数大于40时, 每7个瓶子可以兑换1元钱, ....
+数量越小, 兑换损耗越高         求我有x个瓶子, 最多可以换多少钱?
+# 因为查询这个x的数据很大, 所以必须优化查询的步骤
+方法, 用dp把小于 最高条件之后的瓶子数能兑换多少钱都存储成表
+from cf题目:  https://codeforces.com/contest/1989/problem/D
+
+14,  一种比较有趣的 四向走格子 替换方法:
+d = [0, 1, 0, -1, 0]
+for k in range(4):
+            ni, nj = i + d[k], j + d[k + 1]
+# 一圈下来也是 01, 10, 0-1,-10
+## 这个列表是 循环ok的,
+如果想要八方行踪  再加上  [1,1,-1,-1,1]
+
+15,  二叉树层序遍历, 就是用 bfs
+16,  取间隔pattern的子序列:   力扣  https://leetcode.cn/problems/find-the-maximum-length-of-valid-subsequence-ii/description/
+ 找出有效子序列的最大长度 II;  可以将复杂度降到  O(n*k)
+#tag  交替序列形式 dp
+
+17, 必须使用链表结构才能做的题 (貌似)
+cf:  https://codeforces.com/problemset/problem/1442/B
+# 删除都转化成删自己, 因为自己变成了可被删的数, 代替了取得自己而删的数字的位置
+2024年7月2日15:29:34 我自己想出了方法二,不使用链表     #但是速度也没有更快...
+
+18, groupby使用:
+for k, g in groupby(s):
+            c = len(list(g))
+# len(list(c)) 就是k的个数...
+19, 从时间复杂度入手开始考虑的题目:  偷奶牛  https://github.com/Yawn-Sean/Daily_CF_Problems/blob/main/daily_problems/2024/07/0705/solution/cf103d.md
+
+20,  ~x = -x-1 可以用于倒序遍历 举例:
+a = [1,2,3,4,5]
+for i in range(len(a)):
+print(a[~i])
+同时前后遍历,得到前缀和, 后缀和
+a = [1,2,3,4,5]
+ps_i = [0]*(len(a)+1)
+ps = [0]
+for i in range(len(a)):
+print(a[~i])
+    ps += ps[-1] + a[i],
+ps_i[~i-1] = a[~i] + ps_i[~i]
+print(ps_i)
+print(ps)
+21, 一道有趣的例题:   一种数列,叫做,1-稳定数列,其中任意两个相邻元素最多相差 1 ,   例如,长为3的1稳定数列:
+(1,1,1),(1,1,2),(1,2,1),(1,2,2),(1,2,3),(2,1,1),(2,1,2),…
+给出 长度n 和 idx (从0开始)  求这第idx个序列是什么.
+# 感觉是个构造题  还挺巧妙的 https://codeforces.com/gym/105239/submission/269586704
+a, 用cache dfs 求n长度 x开头的数有几个  加上 3**n-1的特殊限制, 先确定开头数字  b,然后根据剩余需要值,依次构造
+
+22, format 表示形式 , 还是写f' ' 简化版
+cc = format(c, '0.4f')  等价于  f'{c:0.{4}f}'
+b = f"{num:99.5f}"   # 前面的99是字段总长度, 不会补前缀零,但是会补空格
+(摘抄)###2024年5月20日16:54:39,  被坑了,  "{:.1f}".format(i) 形式在 i数字非常大的时候, 会出现错误...
+例题: https://ac.nowcoder.com/acm/contest/82394/E
+#貌似属于浮点问题, 转成浮点之后经度受限制.
+解决方法,str化, 然后自己转...
+# 生成前面补0 的二进制 : f"{i:0{n}b}"  把i转化成 共n位的二进制(b表示)  # 如果n写小了,也不会截断,只有n更大的时候会补0
+
+23, prod(nums)  nums中的数全相乘
+24, 分组循环模板:
+n = len(nums)
+i = 0
+while i < n:
+    start = i
+    while i < n and ...:
+        i += 1
+    # 从 start 到 i-1 是一组
+    # 下一组从 i 开始，无需 i += 1
+25,  牛客的一些题目,可能时间阀值设置有问题, 用递推能过的题,用等价的递归超时; 按照递归慢一倍的经验来思考,倒也合理...
+https://ac.nowcoder.com/acm/contest/85598/D
+# 递推的话, 最外层循环是分段的长度
+
+26, 一种更加省事的 倒叙遍历写法:
+ for i in range(n)[::-1]
+项必须 for i in range(n-1, -1, -1) 额,稍微省点吧
+# 一道小dp专练: https://atcoder.jp/contests/abc362/submissions/55663511
+# 没什么技巧,相当于暴力的dp
+27,  nim问题
+例如 https://leetcode.cn/problems/predict-the-winner/
+完成了递推, 递归双解
+递归还是好想的, 而递推, 多维的时候发现转换的不对,那就要考虑几个循环交换一下顺序
+2024年7月18日21:09:34, 算法模板里还记录了一个 n个石子类问题 解法
+
+28,  使用 accumulate() 可以直接把差分数组还原成原数组
+# 更完全形式 accumulate(nums, operator.add, initial= 0)   第二个参数可以自定义  运算操作
+29,  lambda 函数写法   常用的max:   fmax = lambda x, y: x if x > y else y # 对于python可以加速,因为py的max会先进行麻烦的种类判断
+
+30,  cf 正序排时间  /?order=BY_JUDGED_ASC
+31, 两个数字组合  最接近m但不大于m的值:    有最多ca个a, cb个b   求ka,kb 表示a,b的个数, 使得   ka  * a + kb * b <= m 最大
+遇见题目:  cf https://codeforces.com/contest/1995/problem/B2
+这个属于  b = a+1的特例
+k1 = min(c[a], m//a)
+coins = m - k1 * a
+k2 = min(c[b], coins//b)
+coins -= k2 * b
+r = min(k1, c[b] - k2, coins//(b-a))
+# 2024年7月24日10:06:38, 貌似只能是 相差1的特例比较特别, 其他的, 可以当做 两种物品的背包, 用dp来算那就是暴力了...
+# 顺便,根据这个原理,  背包的最后一个物品不用扫描,可以直接计算...
+32,  sys.setrecursionlimit(150000)  可能会因为 需要内存变大而mle, 所以平时不要打开...
+很无语的一个问题,发生于  https://codeforces.com/contest/1996/problem/C
+另外, 我一开始写的 用Counter来存储, 确实也太大, 去掉setrecursionlimit 依然mle...
+
+2024年7月27日21:43:12, 下面跟两种题型占位置
+33,  二维偏序问题, 必须开专题解决一下了.  第一维排序, 第二维用线段树存储
+# 第一维排序, 查询也排序  从最严格到最松弛遍历查询, 同时添加满足的第一维的数据 ,用线段树记录第二维的值( max型)
+例题: https://leetcode.cn/problems/maximum-sum-queries/submissions/542752676/
+另题, 补 上面 6,  https://www.lanqiao.cn/problems/18494/learning/?contest_id=189
+不能二分的反例  :   2 1 2,  1 3 1   长度1可以, 2不可以, 3 可以  所以没有单调性
+
+
+34, 一道二维背包   https://atcoder.jp/contests/abc364/tasks/abc364_e
+# 如果普通的dp定义方法会超时,那就转换扫描的顺序   比如这题,dp  n,x,y, =  最大dish数  修改成  i, j, x =  最小y值
+核心: swapping the key and value of DP
+
+35, 有些题, 表面很复杂, 但是其实用暴力就能过了.
+https://leetcode.cn/problems/count-the-number-of-substrings-with-dominant-ones/description/
+# 因为有 根号 , 所以不会超时,  大概.
+2024年7月29日10:11:23, 第一遍做错了, 还是需要特殊考虑的;
+#  查看所有0的位置,然后来做枚举,以0的个数为基准, 让其数量不超过n**5,因此 二重循环总的复杂度达成了 n**1.5  不会超时
+##  见到 n**1.5这种特殊的复杂度,就要想点子了.    另外,1 <= s.length <= 4 * 10^4 数据范围也给个比较少见
+
+36, 一道bit dp  蓝桥:  https://www.lanqiao.cn/problems/19748/learning/?contest_id=197
+# 注意,蓝桥的py版本很低, 3.7  连 bit_count都没有
+# 方法, 就是 bit dp
+
+37,  2024年7月28日21:38:48 一个有意义的问题  : oj里面, 是用什么函数来获得print的结果的?
+以及,我可不可以在解答里面写一段代码,把我得到的数据在线发送到其他地方,这样我不就可以获得测试数据了么.
+check: 重定向    logging
+## 2024年7月29日14:10:21, 似乎有一种比较成熟的重定向方法.
+尝试  pycharm的终端里面  使用命令 :
+python  test1.py >data.in      # 2024年7月29日14:23:59 ,成功了!!!
+python b.py <data.in >py.out    #  输入data.in 并 输出到 py.out
+# 代替终端: os.system("python  test1.py >data.in")
+## 这个 把 print的东西 写到 data.in里面,大概就是重定向吧...
+2024年7月29日15:05:58, 搞定了, 因为我不会在py里面 搞出  errorlevel 的值来,所以就用批处理来运行了,反正效果是一样的...
+
+38, 求所有子数组的异或和的和
+2024年8月3日21:31:07, 刚遇到 atcoder的题目 :  https://atcoder.jp/contests/abc365/tasks/abc365_e
+E - Xor Sigma Problem
+2024年8月3日21:37:43, 好家伙,还真的被我给抄到题解了:   https://www.geeksforgeeks.org/sum-of-xor-of-all-subarrays/
+geeksforgeeks 神奇的网站!!!
+
+39,  代替copy的写法:  b = a[:]  等价于  b = a.copy()
+
+40, 有点奇怪的 *b 写法:    必须前面有个别的东西 ,然后 后面的 才会被录入为list
+a, *b = 1,2,3,4,5,6
+# 不能单独使用,也不知道为啥...  2024年8月8日19:59:24 ,可以了, 要加个,
+*b, = 1,2,3
+比较有趣的应用:  用来拆list
+a,*b = [1]*5
+print(a) # 1
+print(b) # [1, 1, 1, 1]
+41,  用np  numpy 可以暴力过一些 题, 比较微妙的方法...
+很多矩阵处理都可以使用 ,不但更方便, 而且还可能会更快...
+例题: https://leetcode.cn/problems/largest-local-values-in-a-matrix/
+import numpy as np
+
+classSolution:
+    deflargestLocal(self, grid: List[List[int]]) -> List[List[int]]:
+        n = len(grid)
+        g = np.array(grid)
+        ans = np.zeros((n-2, n-2)).astype(int)
+        for i inrange(n-2):
+            for j inrange(n-2):
+                ans[i, j] = g[i:i +3, j : j + 3].max()
+        return ans.tolist()
+#  转换成整数 .astype(int)  要不然里面存的都是浮点;
+子矩阵的取最大值:   .max()   要挂在后面 ,而不是前面
+.tolist() 转换回去
+.zeros((n, n)) 制作全零矩阵, 主要 (n,n) 就是括号的
+
+42,  递归翻译成递推, 最后一维搞不定时, 可以试试使用dict()
+例题: https://leetcode.cn/problems/minimum-sum-of-values-by-dividing-array/solutions/2742107/bu-she-ji-gao-ji-shu-ju-jie-gou-de-di-tu-2lt4/?envType=daily-question&envId=2024-08-16
+
+43,   教训:   https://leetcode.cn/problems/shortest-distance-after-road-addition-queries-i/description/
+ 手抖多打了一个等号, 这就不是赋值了,而是一个没他妈用的判断...
+导致没有去重 所以超时
+
+44,  终于知道 python的递归超时怎么处理了:  https://leetcode.cn/circle/discuss/hXMA62/
+tag : RecursionError: maximum recursion depth exceeded in comparison'
+之前抄的板子里面,  bootstrap就是做这个的, 但是,dfs函数需要修改,  改成yield 形式
+另外, 也可以尝试将解法从递归改成递推式
+2024年8月24日09:25:13, 另一个方法:   使用thread
+if __name__ =='__main__':    sys.setrecursionlimit(100000)    threading.stack_size(200000000)    thread = threading.Thread(target=your_code)  # 这里就是需要dfs的函数, 使用args = (...)来传递参数    thread.start()
+# thread只能部分解决问题,而且, 做力扣时, thread离线, 不能快速计算出结果,甚至还需要 , time.sleep() 来等待计算, 这样就会超时...
+例题: https://leetcode.cn/problems/find-the-largest-palindrome-divisible-by-k/
+2024年8月24日10:59:25, 草, 更新了一个python 3.12 ( 以前是3.10). 另外,n = 100000的时候运行时间太长,需要加一个time.sleep(1)
+2024年8月24日11:09:26, 艹,令我非常无语的解决: 更新了一个python 3.12 ( 以前是3.10) 然后就ok了...   这个故事告诉我,软件要经常更新啊....
+2024年8月24日11:17:40, 顺便,把pycharm安装 module 的bug也修好了, 现在不需要自己去 终端 (alt + f12) 里面 敲 pip了, 直接pycharm修正安装 (实际上,终端安装完不能用,大概是因为根目录没改...)
+PS: py3.12 安装时, 有自动该环境变量的选项
+
+45, bisect可以自己限定范围 , 比如
+bisect_left(a, x, lo=0, hi=len(a), *, key=None)
+例题: https://leetcode.cn/problems/count-substrings-that-satisfy-k-constraint-ii/solutions/2884463/hua-dong-chuang-kou-qian-zhui-he-er-fen-jzo25/
+
+46,  将Counter的结果hash的办法
+see.add(tuple(sorted(Counter(x).items())))
+# 这样 see里面就能 不重复的记录所有Counter值
+##同样的思维可以应用去其他unhashable数据类型
+
+47,排列的情况数公式,   有ca 个a cb个b cc个c 的排列个数:  (ca + cb + cc)!/ca!cb!cc!
+阶乘的算法py里貌似没有专门函数, 所以自己写... 可打表
+# 第一位不是 0
+例题: https://leetcode.cn/problems/find-the-count-of-good-integers/description/
+
+48, 自定义比较排序
+例题: https://leetcode.cn/problems/minimum-amount-of-damage-dealt-to-bob/description/
+#如果数据范围比较大,涉及经度问题, 就需要考虑不能直接用 除法 / 来写了
+sort的第二种 key = lambda形式   加入的函数为  s.sort(key=cmp_to_key(mycmp))
+其中:   cmp_to_key 为固定,  mycmp是自己写的比较函数  形式为  def mycmp(x,y):
+例如:
+def mycmp(x,y):
+if x+y > y+x:
+return 1
+elif x+y < y+x:
+return -1
+else:
+return 0
+每次单独比较x和y的大小,最终形成整成的大小排序
+# 对sort函数, 利用分别比较两个值的规则来排序
+
+49, mcf graph  min cost flow graph 最小流图
+匈牙利算法,  是网络流的一个分支;  网络流的用法更普遍.    km算法是匈牙利算法的一个优化
+匈牙利算法只能应用于二分图,  判断二分图的方法   染色法dfs,  所有结点能分成两个集合, 集合1内部的点没有边, 只与集合b之间的点有边
+
+50, 没有实际用处,但是比较秀的写法:   :后面其实就是标志类型,但是,没有实际意义, 甚至可以瞎写...
+edges: List[List[int]] = list([] for _ in range(n))
+edges = list([] for _ in range(n))
+print(edges)
+c : int = n
+print(c)
+51,  前后缀分解  (这个我竟然没记录...)
+经典例题, 美丽塔
+
+52, RuntimeError: dictionary changed size during iteration
+字典和set 都有这个问题,  不允许在for 中改变自己
+但其实这是一个假报错 ,  完全可以复制keys 之后进行
+s = {'b', 'c', 'a'}
+key_s = list(s)
+for x in key_s:
+    s.add(1)
+print(s)
+# 反观list 可以进行这样的操作, 边添加边遍历 但我觉得这样操作是真的奇怪...
+s = [1,2,3]
+key_s = list(s)
+# for x in key_s:
+t = 0
+for x in s:
+    s+= 1,
+t += 1
+if t ==10: break    #不加break 的话,就成死循环了...
+print(s)
+53,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

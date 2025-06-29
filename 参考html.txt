@@ -1,0 +1,898 @@
+#2024年4月13日21:47:51, 这个大概是在线笔记本
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<script async src="../lib/tagmng.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>记事本| 在线写笔记</title>
+<meta name="description" content="在线记事本。免费的记事本应用程序，无需登录。">
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://www.rapidtables.org/lib/ogimages/notepad.jpg" />
+<meta property="og:url" content="https://www.rapidtables.org/tools/notepad.html" />
+<meta property="og:title" content="Notepad online" />
+<meta property="og:description" content="Notepad online free app." />
+<link rel="apple-touch-icon" sizes="180x180" href="../lib/favicon/notepad/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../lib/favicon/notepad/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../lib/favicon/notepad/favicon-16x16.png">
+<link rel="manifest" href="../lib/favicon/notepad/manifest.json">
+<link rel="mask-icon" href="../lib/favicon/notepad/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="../lib/favicon/notepad/favicon.ico">
+<meta name="msapplication-config" content="/lib/favicon/notepad/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="../1.3.0/material.indigo-pink.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="../1.3.0/material.min.js" defer></script>
+<style>
+		html, body {
+			margin:0;
+			height:100%;
+			width:100%;
+			font-family:Arial, Helvetica, sans-serif;
+		}
+      /*
+		#private_div {
+			display:none;
+			height:30px !important;
+			padding-top: 10px;
+		}
+		#private_div a {
+			color:black;
+			text-decoration:none;
+			margin-top:30px;
+			margin-left:0px;
+			padding:20px;
+		}
+		#private_div i {
+			font-size:16px;
+			margin-top:-8px;
+			padding:10px;
+			vertical-align:top;
+		}
+		#private_div i:hover { font-weight:bold; }
+      */
+		#header { 
+			background:#444;
+         /*min-height:65px;*/
+		}
+		.sdiv
+		{
+			display:inline-block;
+			vertical-align:middle;
+			margin-left:30px;
+			margin-right:0px;
+		}
+		#shareaimg { width:40px; height:40px; }
+		#sharea:nth-child(1)img { color:#4867AA; }
+		.social-twitter { color:#1DA1F2; }
+		.social-whatsapp { color:#2DB742; }
+		.social-e-mail-envelope { color:#468A7F; }
+      .adslot { display:inline-block; height:60px; max-height:60px; width:468px; }
+		@media (max-width:800px) {
+			.sdiv { margin-top:10px; margin-bottom:10px; }
+			#share { margin-top:0; display:none; }
+			#ad_div { display:none; padding-top:0px; padding-bottom:20px; }
+			.adslot { max-width:320px; width:320px; max-height:50px; height:50px; }
+		}
+		@media (min-width:721px) and (max-width:1024px) {
+		}
+		@media (min-width:800px) {
+			#ad_div { margin-left:50px; }
+		}
+		#bread { color:#ddd; font-size:medium; vertical-align:middle; margin-bottom:auto; }
+		#bread a { color:#ddd; text-decoration:none; padding:20px 5px; }
+		#bread a:hover { color:#fff; background:#333; }
+		
+		#toolbar {
+			background:#ddd;
+			margin:0;
+			padding-left:20px;
+		}
+		#toolbar button {
+			margin:0;
+			border:0;
+			padding:5px 10px;
+		}
+		#toolbar button:hover {
+			background:#eee;
+		}
+		#toolbar button i {
+			font-size:xx-large;
+			color:#555;
+		}
+		@media all and (max-width: 576px) {
+			#toolbar table tr td:nth-child(-n+3),
+			#toolbar table tr td:nth-child(n+9) { display:none }
+			#addthis, #sub { display:none }
+		}
+		
+		#main {
+			margin:0;
+			padding:0px 0px 20px 0px;
+			height: 90%;
+			/*overflow-x: hidden;*/
+		}
+		textarea {
+			height:100%;
+			width:90%;
+			width:calc(100% - 55px);
+			margin:0;
+			padding-top:3px;
+			padding-left:50px;
+			background:#fdf8c8;
+			font-family:verdana;
+		    font-family: Arial, Helvetica, Sans-serif;
+			font-size:large;
+			outline: none;	
+		}
+		.notes {
+			background-image: -webkit-linear-gradient(90deg, #d0a090 1px, #d0a090 1px), linear-gradient(#fdf8c8, #fdf8c8 23px, #ccd 23px, #ccd 24px, #fdf8c8 24px);
+			background-image: -moz-linear-linear-gradient(90deg, #d0a090 1px, #d0a090 1px), linear-gradient(#fdf8c8, #fdf8c8 23px, #ccd 23px, #ccd 24px, #fdf8c8 24px);
+			background-image: -ms-linear-gradient(90deg, #d0a090 1px, #d0a090 1px), linear-gradient(#fdf8c8, #fdf8c8 23px, #ccd 23px, #ccd 24px, #fdf8c8 24px);
+			background-image: -o-linear-gradient(90deg, #d0a090 1px, #d0a090 1px), linear-gradient(#fdf8c8, #fdf8c8 23px, #ccd 23px, #ccd 24px, #fdf8c8 24px);
+			background-image: linear-gradient(90deg, #d0a090 1px, #d0a090 1px), linear-gradient(#fdf8c8, #fdf8c8 23px, #ccd 23px, #ccd 24px, #fdf8c8 24px);
+			background-size: 2px 100%, 100% 24px;
+			background-position: 40px top, left 0px;
+			background-repeat:no-repeat, repeat;
+		   line-height: 24px !important;
+		   background-attachment: local;
+		}
+		#bar { padding-left:20px; }
+		@media (max-width:576px) {
+			#main { height: calc(100% - 140px); padding:0; }
+		}
+		@media (min-width:577px) {
+			#main { height: calc(100% - 175px); }
+		}
+
+		table,th,td,tr { 
+			border-width: 0px;
+			border-collapse:collapse;
+			padding:0px;
+			margin:0px;
+		}
+		#menu2 { background:#ccc; }
+		#menu2 .mdl-button:hover { background:#ddd; }
+		#menu2 .mdl-menu__outline { background:#f8f8f8; }
+		#menu2ul {
+    		list-style-type: none;
+    		margin: 0;
+    		margin-left:10px;
+    		padding: 0;
+    		overflow: hidden;
+    		/*width: 90px;*/
+		}
+		#menu2ulli {
+			float:left;
+    		display: inline-block;
+		}
+		#menu2ullibutton,
+		#menu2ullia {
+			padding:0 8px;
+    		text-transform:none;
+    		font-size:medium;
+		}
+		#menu2ulli i { margin-right:10px; }
+		/*#menu2ulliullia {*/
+		#menu2 .mdl-menu__item {
+			height:34px;
+			line-height:34px;
+			display: inline-flex;
+			vertical-align: middle;
+			align-items: center;
+			width:100%;
+		}
+		#menu2 .mdl-menu__item i {
+			color:#444;
+		}
+		#tlines { visibility:hidden; }
+
+      #banner { display:none; border-top:1px #eee solid; font-size:14px; position:fixed; z-index:9999; left:0; right:0; bottom:0; padding:1em 1.8em; color:#333333; background:#f8f8f8; }
+      #banner div { vertical-align:middle; display:inline-block; min-width:300px; }
+      #banner div:last-child { min-width:320px; line-height:40px; }
+      #banner a { cursor:pointer; text-decoration:none; color:#333; }
+      #bansetbtn { padding:12px 10px; margin-left:20px; color:#333333; border:1px #ccc solid; white-space:nowrap; }
+      #banokbtn { padding:12px 50px;  margin-left:20px; background:#8EC760; color:#fff !important; font-weight:bold; }
+      #bansetbtn:hover { background:#f0f0f0; }
+      #banokbtn:hover { background:#7EB750; }
+      @media all and (max-width:1000px) {
+         #banner div:last-child { margin-top:10px; }
+         #banokbtn { margin-left:0; }
+      }</style>
+<link rel="canonical" href="https://www.rapidtables.org/zh-CN/tools/notepad.html" />
+<link rel="alternate" hreflang="es" href="https://www.rapidtables.org/tools/notepad.html" />
+<link rel="alternate" hreflang="ar" href="https://www.rapidtables.org/ar/tools/notepad.html" />
+<link rel="alternate" hreflang="bg" href="https://www.rapidtables.org/bg/tools/notepad.html" />
+<link rel="alternate" hreflang="bn" href="https://www.rapidtables.org/bn/tools/notepad.html" />
+<link rel="alternate" hreflang="ca" href="https://www.rapidtables.org/ca/tools/notepad.html" />
+<link rel="alternate" hreflang="cs" href="https://www.rapidtables.org/cs/tools/notepad.html" />
+<link rel="alternate" hreflang="da" href="https://www.rapidtables.org/da/tools/notepad.html" />
+<link rel="alternate" hreflang="de" href="https://www.rapidtables.org/de/tools/notepad.html" />
+<link rel="alternate" hreflang="el" href="https://www.rapidtables.org/el/tools/notepad.html" />
+<link rel="alternate" hreflang="et" href="https://www.rapidtables.org/et/tools/notepad.html" />
+<link rel="alternate" hreflang="fi" href="https://www.rapidtables.org/fi/tools/notepad.html" />
+<link rel="alternate" hreflang="tl" href="https://www.rapidtables.org/tl/tools/notepad.html" />
+<link rel="alternate" hreflang="fr" href="https://www.rapidtables.org/fr/tools/notepad.html" />
+<link rel="alternate" hreflang="gu" href="https://www.rapidtables.org/gu/tools/notepad.html" />
+<link rel="alternate" hreflang="he" href="https://www.rapidtables.org/he/tools/notepad.html" />
+<link rel="alternate" hreflang="hi" href="https://www.rapidtables.org/hi/tools/notepad.html" />
+<link rel="alternate" hreflang="hr" href="https://www.rapidtables.org/hr/tools/notepad.html" />
+<link rel="alternate" hreflang="hu" href="https://www.rapidtables.org/hu/tools/notepad.html" />
+<link rel="alternate" hreflang="id" href="https://www.rapidtables.org/id/tools/notepad.html" />
+<link rel="alternate" hreflang="is" href="https://www.rapidtables.org/is/tools/notepad.html" />
+<link rel="alternate" hreflang="it" href="https://www.rapidtables.org/it/tools/notepad.html" />
+<link rel="alternate" hreflang="ja" href="https://www.rapidtables.org/ja/tools/notepad.html" />
+<link rel="alternate" hreflang="kn" href="https://www.rapidtables.org/kn/tools/notepad.html" />
+<link rel="alternate" hreflang="ko" href="https://www.rapidtables.org/ko/tools/notepad.html" />
+<link rel="alternate" hreflang="lt" href="https://www.rapidtables.org/lt/tools/notepad.html" />
+<link rel="alternate" hreflang="lv" href="https://www.rapidtables.org/lv/tools/notepad.html" />
+<link rel="alternate" hreflang="mk" href="https://www.rapidtables.org/mk/tools/notepad.html" />
+<link rel="alternate" hreflang="ml" href="https://www.rapidtables.org/ml/tools/notepad.html" />
+<link rel="alternate" hreflang="mr" href="https://www.rapidtables.org/mr/tools/notepad.html" />
+<link rel="alternate" hreflang="ms" href="https://www.rapidtables.org/ms/tools/notepad.html" />
+<link rel="alternate" hreflang="nl" href="https://www.rapidtables.org/nl/tools/notepad.html" />
+<link rel="alternate" hreflang="no" href="https://www.rapidtables.org/no/tools/notepad.html" />
+<link rel="alternate" hreflang="pl" href="https://www.rapidtables.org/pl/tools/notepad.html" />
+<link rel="alternate" hreflang="pt" href="https://www.rapidtables.org/pt/tools/notepad.html" />
+<link rel="alternate" hreflang="ro" href="https://www.rapidtables.org/ro/tools/notepad.html" />
+<link rel="alternate" hreflang="ru" href="https://www.rapidtables.org/ru/tools/notepad.html" />
+<link rel="alternate" hreflang="sk" href="https://www.rapidtables.org/sk/tools/notepad.html" />
+<link rel="alternate" hreflang="sl" href="https://www.rapidtables.org/sl/tools/notepad.html" />
+<link rel="alternate" hreflang="sr" href="https://www.rapidtables.org/sr/tools/notepad.html" />
+<link rel="alternate" hreflang="sv" href="https://www.rapidtables.org/sv/tools/notepad.html" />
+<link rel="alternate" hreflang="ta" href="https://www.rapidtables.org/ta/tools/notepad.html" />
+<link rel="alternate" hreflang="te" href="https://www.rapidtables.org/te/tools/notepad.html" />
+<link rel="alternate" hreflang="th" href="https://www.rapidtables.org/th/tools/notepad.html" />
+<link rel="alternate" hreflang="tr" href="https://www.rapidtables.org/tr/tools/notepad.html" />
+<link rel="alternate" hreflang="uk" href="https://www.rapidtables.org/uk/tools/notepad.html" />
+<link rel="alternate" hreflang="ur" href="https://www.rapidtables.org/ur/tools/notepad.html" />
+<link rel="alternate" hreflang="vi" href="https://www.rapidtables.org/vi/tools/notepad.html" />
+<link rel="alternate" hreflang="zh-CN" href="https://www.rapidtables.org/zh-CN/tools/notepad.html" />
+<link rel="alternate" hreflang="zh-TW" href="https://www.rapidtables.org/zh-TW/tools/notepad.html" />
+<script async src="/js/coun_w3.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1YVDBW7SMW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1YVDBW7SMW');
+</script>
+<script> 
+function KJ_AsOT(){var a=document.getElementsByTagName("head")[0],b=document.createElement("script");b.type="text/javascript",b.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2898904755959147",a.appendChild(b)}setTimeout(KJ_AsOT,3000);</script>
+</head>
+<body>
+<div id="header">
+<div class="sdiv">
+<p id="bread"><a href="/zh-CN/">首页</a>›<a href="index.html">工具</a>›记事本</p>
+</div>
+<div class="sdiv" id="share">
+<a id="sharefb" href="#" title="脸书" target="_blank"><img alt="脸书" src="../lib/icons/glyphicons_all/social/png/glyphicons-social-31-facebook%402xb.png"></a>
+<a id="sharetw" href="#" title="推特" target="_blank"><img alt="推特" src="../lib/icons/glyphicons_all/social/png/glyphicons-social-32-twitter%402xb.png"></a>
+<a id="sharewa" href="#" title="WhatsApp的" target="_blank"><img alt="WhatsApp的" src="../lib/icons/glyphicons_all/social/png/glyphicons-social-62-whatsapp%402xb.png"></a>
+<a id="shareml" href="#" title="电子邮件"><img alt="邮件" src="../lib/icons/glyphicons_all/social/png/glyphicons-social-14-e-mail-envelope%402xb.png"></a>
+</div>
+<script>
+			document.getElementById("sharefb").href = "https://facebook.com/sharer/sharer.php?u="+encodeURIComponent(window.location.href)+"&title="+encodeURIComponent(document.title);
+			document.getElementById("sharetw").href = "https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+encodeURIComponent(window.location.href);
+			document.getElementById("sharewa").href = "https://api.whatsapp.com/send?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(window.location.href);
+			document.getElementById("shareml").href = "mailto:?to=&subject="+encodeURIComponent(document.title)+"&body="+encodeURIComponent(window.location.href);
+		</script>
+<div class="sdiv" id="ad_div">
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2898904755959147" data-ad-slot="6451183811" data-ad-format="auto" data-full-width-responsive="true"></ins>
+</div>
+</div>
+<div id="menu2">
+<ul>
+<li>
+<button id="menu-file" class="mdl-button mdl-js-button">文件</button>
+<ul class="mdl-menu mdl-menu-top-left mdl-js-menu mdl-js-ripple-effect" for="menu-file">
+<li><a onclick="New()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">insert_drive_file</i><span>新增</span></a></li>
+<li><a onclick="Open()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">folder_open</i>打开</a></li>
+<li><a onclick="Save()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">save</i>救</a></li>
+<li><a onclick="Save_As()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">save</i>另存为...</a></li>
+<li><a onclick="Print()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">print</i>打印</a></li>
+</ul>
+</li>
+<li>
+<button id="menu-edit" class="mdl-button mdl-js-button">编辑</button>
+<ul class="mdl-menu mdl-menu-top-left mdl-js-menu mdl-js-ripple-effect" for="menu-edit">
+<li><a onclick="Undo()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">undo</i><span>撤消</span></a></li>
+<li><a onclick="Redo()" href="javascript:void(0);" class="mdl-menu__item mdl-menu__item--full-bleed-divider"><i class="material-icons">redo</i><span>重做</span></a></li>
+<li><a onclick="Cut(0)" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">content_cut</i><span>切</span></a></li>
+<li><a onclick="Copy()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">content_copy</i><span>复制</span></a></li>
+<li><a onclick="Paste()" href="javascript:void(0);" class="mdl-menu__item mdl-menu__item--full-bleed-divider"><i class="material-icons">content_paste</i><span>糊</span></a></li>
+<li><a onclick="Del()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">clear</i><span>删除</span></a></li>
+<li><a onclick="SelectAll()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">select_all</i><span>全选</span></a></li>
+</ul>
+</li>
+<li>
+<button href="#" id="menu-view" class="mdl-button mdl-js-button">视图</button>
+<ul class="mdl-menu mdl-menu-top-left mdl-js-menu mdl-js-ripple-effect" for="menu-view">
+<li><a onclick="IncSize()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">zoom_in</i>放大</a></li>
+<li><a onclick="DecSize()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons">zoom_out</i>缩小</a></li>
+<li><a onclick="TextLines()" href="javascript:void(0);" class="mdl-menu__item"><i class="material-icons" id="tlines">check</i>文字行</a></li>
+</ul>
+</li>
+
+<li>
+<button href="#" id="menu-help" class="mdl-button mdl-js-button">救命</button>
+<ul class="mdl-menu mdl-menu-top-left mdl-js-menu mdl-js-ripple-effect" for="menu-help">
+<li><a href="notepad_help.html" class="mdl-menu__item"><i class="material-icons">help</i><span>救命</span></a></li>
+<li><a href="notepad_help.html#feedback" class="mdl-menu__item"><i class="material-icons">feedback</i><span>发送反馈</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="toolbar">
+<table>
+<tr>
+<td><button type="button" name="B1" title="New" onClick="New()"><i class="material-icons">insert_drive_file</i></button></td>
+<td><button type="button" name="B2" title="Open" onClick="Open()"><i class="material-icons">folder_open</i></button></td>
+<td><button type="button" name="B3" title="Save" onClick="Save()"><i class="material-icons">save</i></button></td>
+<td><button type="button" name="B4" title="Cut" onClick="Cut(0)"><i class="material-icons">content_cut</i></button></td>
+<td><button type="button" name="B5" title="Copy" onClick="Copy()"><i class="material-icons">content_copy</i></button></td>
+<td><button type="button" name="B6" title="Paste" onClick="Paste()"><i class="material-icons">content_paste</i></button></td>
+<td><button type="button" name="B7" title="Undo" onClick="Undo()"><i class="material-icons">undo</i></button></td>
+<td><button type="button" name="B8" title="Redo" onClick="Redo()"><i class="material-icons">redo</i></button></td>
+<td><button type="button" name="B9" title="Zoom Out" onClick="DecSize()"><i class="material-icons">zoom_out</i></button></td>
+<td><button type="button" name="B10" title="Zoom In" onClick="IncSize()"><i class="material-icons">zoom_in</i></button></td>
+<td><button type="button" name="B11" title="Help"><a href="notepad_help.html"><i class="material-icons">help_outline</i></a></button></td>
+<td><input type="file" multiple id="fileElem" name="fileElem[]" style="visibility:hidden; width:30px" onchange="loadFile()"></td>
+</tr>
+</table>
+<table>
+<tr id="getFilename" style="display:none">
+<td>输入文件名：</td>
+<td><input type="text" id="filename" name="filename" placeholder="filename.txt" style="width:150px; padding:5px;"></td>
+<td><input type="button" id="save" name="save" value="Save" onclick="saveFile()" style="padding:5px 10px 5px 10px; margin:0px"></td>
+<td><input type="button" id="cancel" name="cancel" value="Cancel" onclick="cancelSaveFile()" style="padding:5px; margin:0px"></td>
+</tr>
+</table>
+</div>
+
+<div id="main">
+<textarea id="area" name="S1" autofocus></textarea>
+<div id="bar"></div>
+</div>
+<div id="banner">
+<div>
+该网站使用Cookie来改善您的体验，分析流量并展示广告。<a href="../about/privacy.html">学到更多</a>
+</div>
+<div>
+<a id="banokbtn">确定</a> <a id="bansetbtn" href="../about/cookies.html">管理设置</a>
+</div>
+</div>
+<script src="../lib/utils/utils.js"></script>
+<script src="../lib/Blob.js-master/Blob.js"></script>
+<script src="../lib/FileSaver.js-master/FileSaver.js"></script>
+<script src="../ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	var browser;
+	var area;
+	var selectedText = "";
+	var selectionStart,selectionEnd;
+	var isIE = false;
+	var txt_hist,pos_hist,ihist,nhist,Nhist;
+	var ctrlDown=false;
+	var key={tabKey:9, ctrlKey:17, pageupKey:33, pagedownKey:34, leftKey:37, upKey:38, rightKey:39, downKey:40, delKey:46, aKey:65, cKey:67, sKey:83, vKey:86, xKey:88, yKey:89, zKey:90};
+	
+	$(window).blur( function()
+	{
+		selectedText="";
+		LocalSave();
+	});
+	
+	$(window).on("unload", function(e)
+	{
+		LocalSave();
+	});
+	$(document).ready( function()
+	{
+		area = document.getElementById("area");
+		txt_hist = new Array();
+		pos_hist = new Array();
+		Nhist = 10;
+		nhist = 0;
+		ihist = 0;
+		
+		var browser = get_browser();
+		
+		if (navigator.appName == 'Microsoft Internet Explorer')
+			isIE = true;
+		
+		if( typeof(localStorage.notepad_text) == 'undefined' )
+		{
+			if( typeof(localStorage.text) == 'undefined' )
+				localStorage.notepad_text = '';
+			else
+				localStorage.notepad_text = localStorage.text;
+		}
+		area.value = localStorage.notepad_text;
+			
+		if( typeof(localStorage.notepad_fontSize) == 'undefined' )
+		{
+			if( typeof(localStorage.fontSize) == 'undefined' )
+				localStorage.notepad_fontSize = 15;
+			else
+				localStorage.notepad_fontSize = localStorage.fontSize;
+		}
+			
+		if( typeof(localStorage.notepad_filename) == 'undefined' )
+			localStorage.notepad_filename = '';
+		SetDocTitle();
+		
+		SetFontSize();
+		
+		$("#area").keydown(function(e) {
+			//setTimeout(function(){ keydown(e); }, 100);
+			keydown(e);
+		});
+		$("#area").keyup(function(e) {
+		   SetBar();
+		});
+
+		Snapshot();
+
+		$("#area").click(function() {
+			pos = getCaret();
+			if( pos!=pos_hist[ihist] )
+				Snapshot();
+			SetBar();
+			return false;
+		});
+		
+		$("#menu2 .mdl-button").mouseenter( function() {
+			$(this).click();
+		});
+		$("#menu2 .mdl-menu").mouseleave( function() {
+			$("#menu2 .mdl-menu__container").removeClass("is-visible");
+		});
+		$("#header").mouseenter( function() {
+			$("#menu2 .mdl-menu__container").removeClass("is-visible");
+		});
+		$("#area").mouseenter( function() {
+			$("#menu2 .mdl-menu__container").removeClass("is-visible");
+		});
+		
+		//$("#private_div a i").click( function() { $("#private_div").hide(); });
+		if( browser=="Chrome" ) {
+			TextLines();
+			//CheckIncognitoMode();
+		}
+		setCaret(0);
+		SetBar();
+		//alert("Please press the Save button to backup your notes. Rapidtables.org will upgrade to secured http in several days.");
+	});
+	/*
+	function CheckIncognitoMode()
+	{
+		var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+		if (!fs) {
+			console.log("check failed?");
+		} else {
+			fs(window.TEMPORARY,
+				100,
+				function() { $("#private_div").hide(); },
+				function() { $("#private_div").show(); });
+		}
+	}
+   */
+	function keydown(e)
+	{
+		var evtobj = window.event? event : e;
+		var ctrlKey=evtobj.ctrlKey;
+		var keyCode=evtobj.keyCode;
+		if( ctrlKey )
+		{
+			if( keyCode==key.aKey )
+			{
+				area.focus();
+			}
+			if( keyCode==key.sKey )
+			{
+				e.preventDefault();
+				Save();
+				return false;
+			}
+			// Ctrl+Z
+			if( keyCode==key.zKey )
+			{
+				e.preventDefault();
+				Undo();
+			}
+			// Ctrl+Y
+			if( keyCode==key.yKey )
+			{
+				e.preventDefault();
+				Redo();
+			}
+			// Ctrl+C
+			if( keyCode==key.cKey )
+			{
+				//e.preventDefault();
+				Copy();
+			}
+			// Ctrl+V
+			if( keyCode==key.vKey )
+			{
+				if( selectedText.length!=0 )
+					e.preventDefault();
+				Paste();
+			}
+			// Ctrl+X
+			if( keyCode==key.xKey )
+			{
+				//e.preventDefault();
+				Cut(1);
+			}
+		}
+		// page up/down
+		if( keyCode==key.upKey || keyCode==key.downKey )
+		{
+			area.focus();
+		}
+		// tab
+		if( keyCode==key.tabKey )
+		{
+			e.preventDefault();
+			Snapshot();
+			s = getSelect(area);
+			var text = area.value;
+			fillString(text, '\u0009', s.start, s.end);
+			pos = s.start+1;
+			setCaret(pos);
+		}
+		// delete
+		if( keyCode==key.delKey )
+		{
+			Del2();
+		}
+
+		//SetBar();
+	}
+	function Print()
+	{
+        childWindow = window.open('','childWindow','location=yes, menubar=yes, toolbar=yes');
+        childWindow.document.open();
+        childWindow.document.write('<html><head></head><body>');
+        childWindow.document.write(document.getElementById('area').value.replace(/\n/gi,'<br>'));
+        childWindow.document.write('</body></html>');
+        childWindow.print();
+        childWindow.document.close();
+        childWindow.close();
+   	}
+   	function Help()
+   	{
+   		window.location.href = 'notepad_help.html';
+   	}
+   	// works with chrome, not in FF
+   	function Exit()
+   	{
+   		window.open('','_self','');
+   		window.close();
+   	}
+	function New()
+	{
+		cancelSaveFile();
+		Snapshot();
+		if( area.value != "" )
+		{
+			var r=confirm("Are you sure?");
+			if (r==true)
+			{
+				area.value = "";
+	    		localStorage.notepad_filename = '';
+				SetDocTitle();		
+				//Snapshot();
+			}
+		}
+		area.focus();
+	}
+	function Open()
+	{
+		cancelSaveFile();
+		var fileElem = document.getElementById("fileElem");
+		fileElem.focus();
+		fileElem.click();
+	}
+	function LocalSave()
+	{
+		localStorage.notepad_text = area.value;
+		area.focus();
+	}
+	function Save_As()
+	{
+		if( area.value=='' ) return;
+		document.getElementById("getFilename").style.display = "";
+		//return false;
+	}
+	function Save()
+	{
+		if( area.value=='' ) return;
+		
+		if( localStorage.notepad_filename=='' )
+			document.getElementById("getFilename").style.display = "";
+		else
+			saveFile();
+		
+		return false;
+	}
+	function SelectAll()
+	{
+		area.select();
+	}
+	function Del()
+	{
+		s = getSelect(area);
+		if( s.text.length!=0 )
+		{
+			Snapshot();
+			var text = area.value;
+			fillString(text,"", s.start, s.end);
+		}
+		pos = s.start;
+		setCaret(pos);
+
+		area.focus();
+	}
+	function Del2()
+	{
+		s = getSelect(area);
+		if( s.text.length!=0 )
+		{
+			Snapshot();
+			var text = area.value;
+			fillString(text,"", s.start, s.end-1);
+		}
+		pos = s.start;
+		setCaret(pos);
+
+		area.focus();
+	}
+	function Cut(isKey)
+	{
+		s = getSelect(area);
+		if( s.text.length!=0 )
+		{
+			Snapshot();
+			selectedText = s.text;
+         if( !isKey )
+			   fillString(area.value,"", s.start, s.end);
+		}
+		else
+			selectedText = '';
+      if( !isKey )
+		{
+         pos = s.start;
+		   setCaret(pos);
+      }
+		area.focus();
+	}
+	function Copy()
+	{
+		//document.execCommand('copy');
+		s = getSelect(area);
+		if( s.text.length!=0 )
+			selectedText = s.text;
+		else
+			selectedText = '';
+		setSelect(area,s.start,s.end);
+		area.focus();
+	}
+	function Paste()
+	{
+		s = getSelect(area);
+		Snapshot();
+		if( selectedText.length!=0 )
+		{
+			//Snapshot();
+			var text = area.value;
+			fillString(text, selectedText, s.start, s.end);
+			pos = s.start+selectedText.length;
+			setCaret(pos);
+		}
+		area.focus();
+	}
+	function cancelSaveFile()
+	{
+		document.getElementById("getFilename").style.display = "none";
+	}
+	function saveFile()
+	{
+		document.getElementById("getFilename").style.display = "none";
+		var name = document.getElementById("filename").value;
+		if( name=='' ) name='filename.txt';
+		localStorage.notepad_filename = name;
+		SetDocTitle();
+		LocalSave();
+		
+		s = area.value;
+		OSName = GetOS();
+		if( OSName=="Windows" )
+			s = s.replace(/\n/g,'\r\n');
+		var blob = new Blob([s], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, localStorage.notepad_filename);
+	}
+	function loadFile()
+	{
+		var fileElem = document.getElementById("fileElem").files[0];
+      document.getElementById("fileElem").value="";
+		var name = fileElem.name;
+		var reader = new FileReader();
+	   reader.onloadend = function(evt) {
+	    	if( evt.target.readyState==FileReader.DONE ) {
+	    		localStorage.notepad_filename = name;
+				SetDocTitle();
+	    		//area.value = evt.target.result;
+	    		s = evt.target.result;
+				OSName = GetOS();
+				if( OSName=="Windows" )
+		    		s = s.replace(/\r\n/g,'\n');
+	    		area.value = s;
+				area.focus();				
+      	}
+    	};
+		reader.readAsText(fileElem);
+	}
+	function getSelect(obj)
+	{
+		var s = obj.selectionStart;
+		var e = obj.selectionEnd;
+		var txt = obj.value.substring(s,e);
+		return { start: s, end: e, text: txt };
+	}
+	function setSelect(obj, start, end) 
+	{
+		obj.focus(); 
+		obj.selectionStart = start; 
+		obj.selectionEnd = end; 
+	}
+	function fillString(text, selectText, start, end)
+	{
+		// split textarea value into three pieces: before startPosition,
+	    // startPosition until endPosition, and after endPosition
+		var str1 = text.substring(0,start);
+		var str2 = text.substring(start,end);
+		var str3 = text.substring(end,text.length);
+		// replace str2 with formatted substring (selectedText)
+		str2 = selectText;
+		area.value = str1+str2+str3;
+	}
+	// !!! check with IE
+	function getCaret()
+	{
+		return area.selectionStart;
+	}
+	function setCaret(pos)
+	{
+		area.selectionStart = pos;
+		area.selectionEnd   = pos;
+	}
+	function Snapshot()
+	{
+		pos = getCaret();
+		txt = area.value;
+		if( txt_hist[ihist-1]==area.value ) return;
+		if( ihist==nhist )
+		{
+			pos_hist.push(pos);
+			txt_hist.push(txt);
+			ihist++;
+			if( pos_hist.length > Nhist )
+			{
+				pos_hist.shift();
+				txt_hist.shift();
+				ihist--;
+			}
+		}
+		else
+		{
+			pos_hist[ihist] = pos;
+			txt_hist[ihist] = txt;
+			ihist++;
+			if( (ihist+1)<=nhist )
+				for(i=ihist+1; i<=nhist; i++)
+				{
+					pos_hist.pop();
+					txt_hist.pop();
+				}
+		}
+		nhist = ihist;
+	}
+	function Undo()
+	{
+		//if( browser=='Chrome' )
+		if(0)
+		{
+			document.execCommand('undo',false,null);
+			return;
+		}
+		
+		if( nhist==0 ) return;
+		if( ihist<2 ) return;
+		
+		if( txt_hist[ihist-1]!=area.value )
+			Snapshot();
+		ihist--;
+		i = ihist-1
+		pos = pos_hist[i];
+		txt = txt_hist[i];
+		setCaret(pos);
+		area.value = txt;
+	}
+	function Redo()
+	{
+		//if( browser=='Chrome' )
+		if(0)
+		{
+			document.execCommand('redo',false,null);
+			return;
+		}
+		
+		if( nhist==0 ) return;
+		if( ihist==nhist ) return;
+		pos = pos_hist[ihist];
+		txt = txt_hist[ihist];
+		ihist++;
+		setCaret(pos);
+		area.value = txt;
+	}
+	function DecSize()
+	{
+		if( localStorage.notepad_fontSize > 8 ) 
+		{
+			localStorage.notepad_fontSize--;
+			if( localStorage.notepad_fontSize >= 13 ) localStorage.notepad_fontSize--;
+			SetFontSize();
+		}
+		area.focus();
+	}
+	function IncSize()
+	{
+		if( localStorage.notepad_fontSize < 50 ) 
+		{
+			localStorage.notepad_fontSize++;
+			if( localStorage.notepad_fontSize >= 13 ) localStorage.notepad_fontSize++;
+			SetFontSize();
+		}
+		area.focus();
+	}
+	function TextLines()
+	{
+		var visibility=$("#tlines").css('visibility');
+		$("#tlines").css('visibility', (visibility == 'visible') ? 'hidden' : 'visible');
+		if( visibility == 'visible' )
+			$("#area").removeClass("notes");
+		else
+			$("#area").addClass("notes");
+	}
+	function SetFontSize()
+	{
+		area.style.fontSize = localStorage.notepad_fontSize+'px';
+	}
+	function SetDocTitle()
+	{
+		var name = localStorage.notepad_filename;
+		if( name=='' )
+			document.title = 'Notepad | Online Notes free, no login required';
+		else
+			document.title = 'Notepad - '+localStorage.notepad_filename;
+	}
+	function SetBar() {
+		//var pos=$("#area").prop("selectionStart");
+		var pos=$("#area").prop("selectionEnd");
+		var txt=$("#area").val();
+      var chars = txt.length;
+		txt = txt.substring(0,pos);
+		var line = txt.split('\n').length;
+		var col = txt.split('\n')[line-1].length+1;
+		$("#bar").html("Line "+line+", Column "+col+"&emsp;&emsp;&emsp; Chars "+chars);
+	}
+</script>
+</body>
+</html>

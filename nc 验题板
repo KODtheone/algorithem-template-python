@@ -1,0 +1,105 @@
+'''
+以 牛客 的  https://ac.nowcoder.com/acm/contest/78306/F 为例
+
+'''
+from collections import Counter, defaultdict
+from itertools import combinations
+from random import random, randint
+#大循环
+c = 999
+while c > 0:
+    # 生成测试数据额
+    n = randint(2,10_000)
+    n = randint(2,10)
+    m = randint(1, 10)
+    # m =5
+    dl = []
+    t = 0
+    while t < m:
+        a = randint(1,n-1)
+        b = randint(a + 1, n)
+        dl += [[a,b]]
+        t += 1
+    # print(n,m,dl)
+
+    # n = 5
+    # m = 8
+    # dl = [[3, 4], [1, 3], [2, 4], [3, 4], [1, 3], [2, 5], [3, 4], [4, 5]]
+
+    #我的解答
+    def my(n,m,dl):
+        vs = set()
+        for a, b in dl:
+            vs.add(a)
+            # vs.add(b)
+            vs.add(b+1)
+            # vs.add((a+b )/2)
+        vs.add(n+1)
+        vs.add(1)
+        vs = sorted(list(vs))
+        # print(vs)
+
+        def fun_in(tdl):
+            t = 0
+            c = Counter()
+            for a, b in tdl:
+                c[a] += 1
+                c[b+1] -= 1
+            for x in vs[:-1]:
+                t += c[x]
+                # print(t)
+                if t < 2:
+                    return False
+            return True
+
+        ans = 0
+        # print(dl)
+        all_tdl = [list(combinations(dl, i)) for i in range(m+1)]
+        ans = 0
+        for x in all_tdl:
+            # print(x)
+            for xx in x:
+                # print(xx)
+                if fun_in(xx):
+                    # print(xx)
+                    # print("good")
+                    ans += 1
+        return (ans)
+
+    #正确解答
+    def solve(n,m,A):
+        s=set()
+        for a,b in A:
+            s.add(a)
+            s.add(b+1)
+        ans=0
+        for i in range(1<<m):
+            d=defaultdict(int)
+            for j in range(m):
+                if i>>j&1:
+                    a,b=A[j]
+                    d[a]+=1
+                    d[b+1]-=1
+            if 1 not in d:
+                continue
+            sums=0
+            for x in sorted(d.keys()):
+                if x==n+1:
+                    ans+=1
+                    break
+                sums+=d[x]
+                if sums<2:
+                    break
+        return ans
+
+    mans = my(n,m,dl)
+    sans = solve(n,m,dl)
+    print(mans, sans)
+    print(mans == sans)
+    if mans != sans:
+        print("反例:")
+        print(n, m)
+        for a,b in dl:
+            print(a,b)
+        break
+    c -= 1
